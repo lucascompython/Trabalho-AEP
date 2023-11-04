@@ -3,7 +3,6 @@ param (
     [switch]$release = $false,
     [switch]$run = $false
 )
-# cflags for msvc (cl.exe)
 $CFLAGS = ""
 $LDFLAGS = ""
 $sourceDir = "src"
