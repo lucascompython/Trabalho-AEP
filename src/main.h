@@ -1,3 +1,6 @@
+#ifndef MAIN_H
+#define MAIN_H
+
 #define RED "\033[0;31m"
 #define GREEN "\033[0;32m"
 #define YELLOW "\033[0;33m"
@@ -17,7 +20,8 @@
 #define BACKGROUND_CYAN "\033[46m"
 #define BACKGROUND_WHITE "\033[47m"
 
-typedef enum {
+typedef enum
+{
   Ramos,
   Arranjos,
   Jarros,
@@ -25,10 +29,13 @@ typedef enum {
   OutasFlores
 } CategoriaProduto;
 
-typedef struct {
+typedef struct
+{
   int codigo_produto;
   int preco;
   int quantidade;
   CategoriaProduto categoria;
 
 } Artigo;
+
+#endif
