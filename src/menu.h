@@ -5,6 +5,6 @@
 
 void menu_item(char *string, char *color1, char *color2);
 void menu_centered_item(char *string, char *color1, char *color2, int32_t row_offset);
-void clear_menu();
+void clear_menu(void);
 
 #endif // MENU_H

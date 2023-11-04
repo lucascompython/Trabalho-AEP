@@ -17,14 +17,14 @@ void menu_gestao_produtos() {}
 void menu_gestao_vendas() {}
 void menu_gestao_stocks() {}
 
-void menu_principal()
+void menu_principal(void)
 {
 
-  menu_centered_item("Gestão de Clientes", RED, BOLD, 0);
+  menu_centered_item("Introduzir informação sobre um artigo", RED, BOLD, 0);
 
-  menu_centered_item("Gestão de Produtos", RED, BOLD, 1);
+  menu_centered_item("Listar informações", RED, BOLD, 1);
 
-  menu_centered_item("Gestão de Vendas", RED, BOLD, 2);
+  menu_centered_item("Modificar o preço e/ou stock de um artigo", RED, BOLD, 2);
 
   menu_centered_item("Sair", RED, BOLD, 3);
 
@@ -68,7 +68,7 @@ void menu_principal()
   }
 }
 
-void welcome_screen()
+void welcome_screen(void)
 {
   clear_menu();
   char *welcome_message = "Bem vindo ao sistema de gestão de stocks";

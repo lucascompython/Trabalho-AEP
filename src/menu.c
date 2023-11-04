@@ -23,7 +23,7 @@ void menu_centered_item(char *string, char *color1,
            color1, color2, string, RESET);
 }
 
-void clear_menu()
+void clear_menu(void)
 {
     printf("\033[2J");
 }
