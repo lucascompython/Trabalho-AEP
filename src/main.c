@@ -86,7 +86,8 @@ void welcome_screen(void)
 
 int main(void)
 {
-  setlocale(LC_ALL, "Portuguese");
+  setlocale(LC_ALL, "Portuguese.UTF8");
+  
   if (get_terminal_size(&term_size) != 0)
   {
     fprintf(stderr, "Erro a conseguir o tamanho do terminal...\n");
