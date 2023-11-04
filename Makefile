@@ -1,10 +1,11 @@
 # Compiler and flags
 CC = clang
 CFLAGS = -Wall -Wextra -Werror -std=c17
-LDFLAGS = 
+LDFLAGS =
 
 # Compiler flags for the release build
-CFLAGS_RELEASE = -O2 -DNDEBUG
+CFLAGS_RELEASE = -O2 -DNDEBUG -march=native
+LDFLAGS_RELEASE = -s
 
 # Directories
 SRC_DIR = src
@@ -21,7 +22,9 @@ TARGET = gestao_stocks
 all: $(BUILD_DIR)/$(TARGET)
 
 # Build the release version with optimizations
+
 release: CFLAGS = $(CFLAGS_RELEASE)
+release: LDFLAGS = $(LDFLAGS_RELEASE)
 release: all
 
 # Build the executable and run it
