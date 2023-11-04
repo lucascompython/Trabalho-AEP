@@ -12,12 +12,14 @@ void menu_gestao_produtos() {}
 void menu_gestao_vendas() {}
 void menu_gestao_stocks() {}
 
-typedef struct {
+typedef struct
+{
   int32_t rows;
   int32_t columns;
 } TerminalSize;
 
-TerminalSize get_terminal_size(void) {
+TerminalSize get_terminal_size(void)
+{
   struct winsize w;
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
   TerminalSize size = {w.ws_row, w.ws_col};
@@ -25,12 +27,14 @@ TerminalSize get_terminal_size(void) {
 }
 
 void menu_item(char *string, int32_t string_size, TerminalSize size,
-               char *color1, char *color2) {
+               char *color1, char *color2)
+{
   printf("\033[%d;%dH%s%s%s%s", size.rows, size.columns - string_size, color1,
          color2, string, RESET);
 }
 
-void menu_principal(TerminalSize size) {
+void menu_principal(TerminalSize size)
+{
 
   char *gestao_clientes = "Gestão de Clientes";
   int32_t gestao_clientes_size = strlen(gestao_clientes);
@@ -72,7 +76,8 @@ void menu_principal(TerminalSize size) {
   char user_input;
   printf("\033[%d;%dH%s%s%s", size.rows - 1, 0, UNDERLINE, "Opção: ", RESET);
   scanf("%c", &user_input);
-  switch (user_input) {
+  switch (user_input)
+  {
   case '1':
     system("clear");
     menu_gestao_clientes();
@@ -103,7 +108,8 @@ void menu_principal(TerminalSize size) {
   }
 }
 
-void welcome_screen(TerminalSize size) {
+void welcome_screen(TerminalSize size)
+{
   // calculate the size of the terminal and print the welcome message at the
   // center
   system("clear");
@@ -120,7 +126,8 @@ void welcome_screen(TerminalSize size) {
   menu_principal(size);
 }
 
-int main(void) {
+int main(void)
+{
   TerminalSize size = get_terminal_size();
 
   welcome_screen(size);
