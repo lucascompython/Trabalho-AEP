@@ -18,7 +18,8 @@ if ($clean) {
 
 
 if ($release) {
-    $CFLAGS += "-O2"
+    $CFLAGS += "-O2 -Z7 -MD"
+    $LDFLAGS += ""
 }
 
 if (!(Test-Path "build")) {
@@ -38,7 +39,8 @@ foreach ($file in $c_files) {
     # Create the output directory if it doesn't exist
     $outputDir = Split-Path $outputPath
     # Compile the file
-    cl.exe $CFLAGS $relativePath -c -Fo:$outputPath
+    
+    "cl.exe $CFLAGS $relativePath -c -Fo:$outputPath" | Invoke-Expression
 }
 
 # Link the object files
