@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "term_size.h": "c",
+    "stdbool.h": "c"
+  }
+}

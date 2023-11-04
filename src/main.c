@@ -1,5 +1,6 @@
 #include "main.h"
 #include "colors.h"
+#include "term_size.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -12,20 +13,6 @@ void menu_gestao_clientes() {}
 void menu_gestao_produtos() {}
 void menu_gestao_vendas() {}
 void menu_gestao_stocks() {}
-
-typedef struct
-{
-  int32_t rows;
-  int32_t columns;
-} TerminalSize;
-
-TerminalSize get_terminal_size(void)
-{
-  struct winsize w;
-  ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-  TerminalSize size = {w.ws_row, w.ws_col};
-  return size;
-}
 
 void menu_item(char *string, int32_t string_size, TerminalSize size,
                char *color1, char *color2)
@@ -129,7 +116,15 @@ void welcome_screen(TerminalSize size)
 
 int main(void)
 {
-  TerminalSize size = get_terminal_size();
+  TerminalSize size;
+  if (get_terminal_size(&size) == 0)
+  {
+    printf("Terminal size: %d rows, %d columns\n", size.rows, size.columns);
+  }
+  else
+  {
+    fprintf(stderr, "Error getting terminal size\n");
+  }
 
   welcome_screen(size);
   return 0;
