@@ -2,6 +2,7 @@
 
 #ifdef __unix__
 #include <sys/ioctl.h>
+#include <unistd.h>
 
 int get_terminal_size(TerminalSize *size)
 {
