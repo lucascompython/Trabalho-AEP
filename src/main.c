@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
 TerminalSize term_size;
 
@@ -85,6 +86,7 @@ void welcome_screen(void)
 
 int main(void)
 {
+  setlocale(LC_ALL, "Portuguese");
   if (get_terminal_size(&term_size) != 0)
   {
     fprintf(stderr, "Erro a conseguir o tamanho do terminal...\n");
