@@ -87,14 +87,10 @@ void welcome_screen()
 
 int main(void)
 {
-  if (get_terminal_size(&term_size) == 0)
+  if (get_terminal_size(&term_size) != 0)
   {
-    printf("Terminal size: %d rows, %d columns\n", term_size.rows,
-           term_size.columns);
-  }
-  else
-  {
-    fprintf(stderr, "Error getting terminal size\n");
+    fprintf(stderr, "Erro a conseguir o tamanho do terminal...\n");
+    return 1;
   }
 
   welcome_screen();
