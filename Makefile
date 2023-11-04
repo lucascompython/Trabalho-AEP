@@ -1,3 +1,14 @@
+ifeq ($(OS),Windows_NT)
+all:
+	@powershell.exe -NoProfile -ExecutionPolicy ByPass -File make.ps1
+release:
+	@powershell.exe -NoProfile -ExecutionPolicy ByPass -File make.ps1 -release
+clean:
+	@powershell.exe -NoProfile -ExecutionPolicy ByPass -File make.ps1 -clean
+run:
+	@powershell.exe -NoProfile -ExecutionPolicy ByPass -File make.ps1 -run
+else
+
 # Compiler and flags
 CC = clang
 CFLAGS = -Wall -Wextra -Werror -std=c17
@@ -22,7 +33,6 @@ TARGET = gestao_stocks
 all: $(BUILD_DIR)/$(TARGET)
 
 # Build the release version with optimizations
-
 release: CFLAGS = $(CFLAGS_RELEASE)
 release: LDFLAGS = $(LDFLAGS_RELEASE)
 release: all
@@ -30,8 +40,6 @@ release: all
 # Build the executable and run it
 run: all
 	./$(BUILD_DIR)/$(TARGET)
-
-
 
 # Link object files to create the executable
 $(BUILD_DIR)/$(TARGET): $(OBJS)
@@ -50,3 +58,5 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 .PHONY: all release clean
+
+endif
