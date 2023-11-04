@@ -13,7 +13,7 @@ int get_terminal_size(TerminalSize *size)
         size->columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;
         size->rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
         return 0; // Success
-    };
+    }
     else
     {
         return -1; // Error
