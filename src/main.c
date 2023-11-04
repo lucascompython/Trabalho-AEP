@@ -1,5 +1,6 @@
 #include "main.h"
 #include "colors.h"
+#include "menu.h"
 #include "term_size.h"
 #include <stdbool.h>
 #include <stdint.h>
@@ -15,22 +16,6 @@ void menu_gestao_clientes() {}
 void menu_gestao_produtos() {}
 void menu_gestao_vendas() {}
 void menu_gestao_stocks() {}
-
-void menu_item(char *string, char *color1, char *color2)
-{
-  int32_t string_size = strlen(string);
-  printf("\033[%d;%dH%s%s%s%s", term_size.rows, term_size.columns - string_size, color1,
-         color2, string, RESET);
-}
-
-void menu_centered_item(char *string, char *color1,
-                        char *color2, int32_t row_offset)
-{
-
-  int32_t string_size = strlen(string);
-  printf("\033[%d;%dH%s%s%s%s", (term_size.rows / 2) + row_offset, (term_size.columns - string_size) / 2,
-         color1, color2, string, RESET);
-}
 
 void menu_principal()
 {
@@ -53,31 +38,31 @@ void menu_principal()
   switch (user_input)
   {
   case '1':
-    system("clear");
+    clear_menu();
     menu_gestao_clientes();
     break;
   case '2':
-    system("clear");
+    clear_menu();
     menu_gestao_produtos();
     break;
   case '3':
-    system("clear");
+    clear_menu();
     menu_gestao_vendas();
     break;
   case '4':
-    system("clear");
+    clear_menu();
     menu_gestao_stocks();
     break;
   case '5':
-    system("clear");
+    clear_menu();
     exit(0);
     break;
   default:
-    system("clear");
+    clear_menu();
     printf("\033[%d;%dH%s%s%s", term_size.rows / 2, term_size.columns / 2 - 10,
            RED, BOLD, "Opção inválida");
     getchar();
-    system("clear");
+    clear_menu();
     menu_principal();
     break;
   }
@@ -85,7 +70,7 @@ void menu_principal()
 
 void welcome_screen()
 {
-  system("clear");
+  clear_menu();
   char *welcome_message = "Bem vindo ao sistema de gestão de stocks";
   int32_t welcome_message_size = strlen(welcome_message);
   int32_t welcome_message_row = term_size.rows / 2;
@@ -96,7 +81,7 @@ void welcome_screen()
   printf("\033[%d;%dH%s%s%s", welcome_message_row + 1, welcome_message_column,
          UNDERLINE, "Pressione qualquer tecla para continuar\n", RESET);
   getchar();
-  system("clear");
+  clear_menu();
   menu_principal();
 }
 
