@@ -19,52 +19,13 @@ void menu_gestao_stocks() {}
 void menu_principal(void)
 {
 
-  menu_centered_item("Introduzir informação sobre um artigo", RED, BOLD, 0);
+  char *options[] = {"Gestão de clientes", "Gestão de produtos",
+                     "Gestão de vendas", "Gestão de stocks", "Sair"};
 
-  menu_centered_item("Listar informações", RED, BOLD, 1);
-
-  menu_centered_item("Modificar o preço e/ou stock de um artigo", RED, BOLD, 2);
-
-  menu_centered_item("Sair", RED, BOLD, 3);
-
-  // get the user input
-  // if the user input is 1, 2, 3, 4 or 5, call the corresponding function
-  // otherwise, print an error message and call the main menu again
-  char user_input;
-  printf("\033[%d;%dH%s%s%s", term_size.rows - 1, 0, UNDERLINE,
-         "Opção: ", RESET);
-  scanf("%c", &user_input);
-  switch (user_input)
-  {
-  case '1':
-    clear_menu();
-    menu_gestao_clientes();
-    break;
-  case '2':
-    clear_menu();
-    menu_gestao_produtos();
-    break;
-  case '3':
-    clear_menu();
-    menu_gestao_vendas();
-    break;
-  case '4':
-    clear_menu();
-    menu_gestao_stocks();
-    break;
-  case '5':
-    clear_menu();
-    exit(0);
-    break;
-  default:
-    clear_menu();
-    printf("\033[%d;%dH%s%s%s", term_size.rows / 2, term_size.columns / 2 - 10,
-           RED, BOLD, "Opção inválida");
-    getchar();
-    clear_menu();
-    menu_principal();
-    break;
-  }
+  int32_t totalOptions = (int)LENGTH(options);
+  int32_t result = arrow_menu(options, totalOptions);
+  printf("Numero selecionado: %d\n", result);
+  getchar();
 }
 
 void welcome_screen(void)
@@ -87,7 +48,7 @@ void welcome_screen(void)
 int main(void)
 {
   setlocale(LC_ALL, "Portuguese.UTF8");
-  
+
   if (get_terminal_size(&term_size) != 0)
   {
     fprintf(stderr, "Erro a conseguir o tamanho do terminal...\n");

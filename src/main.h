@@ -1,6 +1,7 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#define LENGTH(x) (sizeof(x) / sizeof((x)[0]))
 typedef enum
 {
   Ramos,

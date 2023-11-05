@@ -27,3 +27,8 @@ void clear_menu(void)
 {
     printf("\033[2J");
 }
+
+void cursor_upLeft(void)
+{
+    printf("\033[H");
+}
