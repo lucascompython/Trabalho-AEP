@@ -25,8 +25,6 @@ void disableRawMode(void)
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
 }
 
-// function that creates a menu controlled by the arrow keys and returns the selected option
-// accepts an array of strings with the options and the number of options
 int32_t arrow_menu(char *strings[], int32_t size)
 {
     enableRawMode();
@@ -42,10 +40,15 @@ int32_t arrow_menu(char *strings[], int32_t size)
             if (i == selectedOption)
             {
                 printf("\033[7m"); // Invert text color (selected option)
+                menu_centered_item(strings[i], "", "", i);
+                printf("\033[0m\n"); // Reset text color
             }
-            // printf("%s", strings[i]);
-            menu_centered_item(strings[i], "", "", i);
-            printf("\033[0m\n"); // Reset text color
+            else
+            {
+
+                menu_centered_item(strings[i], "", "", i);
+                puts("");
+            }
         }
 
         // Handle arrow key input

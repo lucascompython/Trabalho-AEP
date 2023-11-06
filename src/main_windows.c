@@ -23,10 +23,14 @@ int arrow_menu(char *strings[], int size)
             if (i == selectedOption)
             {
                 printf("\033[7m"); // Invert text color (selected option)
+                menu_centered_item(strings[i], "", "", i);
+                printf("\033[0m\n"); // Reset text color
             }
-            // printf("%s", strings[i]);
-            menu_centered_item(strings[i], "", "", i);
-            printf("\033[0m\n"); // Reset text color
+            else
+            {
+                menu_centered_item(strings[i], "", "", i);
+                puts("");
+            }
         }
 
         // Handle arrow key input
