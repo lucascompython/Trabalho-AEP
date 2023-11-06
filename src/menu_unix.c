@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <termios.h>
 #include "menu.h"
-#include "stdint.h"
+#include <stdint.h>
 #include <stdio.h>
 
 #define ESC 27
