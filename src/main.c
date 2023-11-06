@@ -11,10 +11,22 @@
 
 TerminalSize term_size;
 
-void menu_gestao_clientes() {}
-void menu_gestao_produtos() {}
-void menu_gestao_vendas() {}
-void menu_gestao_stocks() {}
+void menu_gestao_clientes()
+{
+  menu_centered_item("Gestão de clientes", BLUE, BOLD, 0);
+}
+void menu_gestao_produtos()
+{
+  menu_centered_item("Gestão de produtos", BLUE, BOLD, 0);
+}
+void menu_gestao_vendas()
+{
+  menu_centered_item("Gestão de vendas", BLUE, BOLD, 0);
+}
+void menu_gestao_stocks()
+{
+  menu_centered_item("Gestão de stocks", BLUE, BOLD, 0);
+}
 
 void menu_principal(void)
 {
@@ -24,22 +36,38 @@ void menu_principal(void)
 
   int32_t totalOptions = (int)LENGTH(options);
   int32_t result = arrow_menu(options, totalOptions);
-  printf("Numero selecionado: %d\n", result);
-  getchar();
+  clear_menu();
+  switch (result)
+  {
+  case 0:
+    menu_gestao_clientes();
+    break;
+  case 1:
+    menu_gestao_produtos();
+    break;
+  case 2:
+    menu_gestao_vendas();
+    break;
+  case 3:
+    menu_gestao_stocks();
+    break;
+  case 4:
+    exit(0);
+    break;
+  default:
+    exit(1);
+    break;
+  }
 }
 
 void welcome_screen(void)
 {
   clear_menu();
-  char *welcome_message = "Bem vindo ao sistema de gestão de stocks";
-  int32_t welcome_message_size = strlen(welcome_message);
-  int32_t welcome_message_row = term_size.rows / 2;
-  int32_t welcome_message_column =
-      (term_size.columns - welcome_message_size) / 2;
-  printf("\033[%d;%dH%s%s%s%s", welcome_message_row, welcome_message_column,
-         RED, BOLD, welcome_message, RESET);
-  printf("\033[%d;%dH%s%s%s", welcome_message_row + 1, welcome_message_column,
-         UNDERLINE, "Pressione qualquer tecla para continuar\n", RESET);
+
+  menu_centered_item("Bem vindo ao sistema de gestão de stocks", GREEN, BOLD, 0);
+  menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
+  puts("");
+
   getchar();
   clear_menu();
   menu_principal();
