@@ -11,7 +11,7 @@ make run # compilar e exucutar
 ## Windows
 
 Neste projeto estamos a utilizar o `MSVC`, por isso é necessário ter o Visual Studio instalado e executar os comandos a partir do "Develop Powershell/Command Prompt for VS".  
-Não funciona em terminais que não suportam códigos de escape ANSI. Recomendamos o [Windows Terminal](https://apps.microsoft.com/detail/9N0DX20HK701?hl=ar-so&gl=SO).
+Não funciona em terminais que não suportam códigos de escape ANSI. Recomendamos o [Windows Terminal](https://apps.microsoft.com/detail/9N0DX20HK701).
 
 Se quiser utilizar o `make`, é preciso instala-lo com:
 
