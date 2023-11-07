@@ -82,10 +82,6 @@ void welcome_screen(void)
 
   getchar();
 
-#ifdef __unix__
-  enableRawMode();
-#endif
-
   clear_menu();
   menu_principal();
 }
