@@ -60,14 +60,20 @@ int32_t arrow_menu(char *strings[], int32_t size)
             {
                 c = getchar(); // Read the [
                 c = getchar(); // Read the A, B, C, or D
-                if (c == 'A' && selectedOption > 0)
+                if (c == 'A')
                 {
-                    selectedOption--; // Up arrow key
+                    if (selectedOption > 0)
+                        selectedOption--; // Up arrow key
+                    else
+                        selectedOption = totalOptions - 1; // Voltar ao fim
                     break;
                 }
-                else if (c == 'B' && selectedOption < totalOptions - 1)
+                else if (c == 'B')
                 {
-                    selectedOption++; // Down arrow key
+                    if (selectedOption < totalOptions - 1)
+                        selectedOption++; // Down arrow key
+                    else
+                        selectedOption = 0; // Voltar ao inicio
                     break;
                 }
             }

@@ -42,14 +42,22 @@ int arrow_menu(char *strings[], int size)
             {
                 return selectedOption;
             }
-            else if (key == ARROW_UP && selectedOption > 0)
+            else if (key == ARROW_UP)
             {
-                selectedOption--; // Up arrow key
+                if (selectedOption > 0)
+                    selectedOption--; // Up arrow key
+                else
+                    selectedOption = totalOptions - 1; // Voltar para o fim
+
                 break;
             }
-            else if (key == ARROW_DOWN && selectedOption < totalOptions - 1)
+            else if (key == ARROW_DOWN)
             {
-                selectedOption++; // Down arrow key
+                if (selectedOption < totalOptions - 1)
+                    selectedOption++; // Down arrow key
+                else
+                    selectedOption = 0; // Voltar para o inicio
+
                 break;
             }
         }
