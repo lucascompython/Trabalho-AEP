@@ -12,7 +12,6 @@
 
 void restoreCursor(int signal)
 {
-  printf("SIGNAL: %d", signal);
   show_cursor();
 }
 
