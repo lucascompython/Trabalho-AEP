@@ -4,6 +4,7 @@
 #include "menu.h"
 #include <stdint.h>
 #include <stdio.h>
+#include "colors.h"
 
 #define ESC 27
 
@@ -41,7 +42,7 @@ int32_t arrow_menu(char *strings[], int32_t size)
             {
                 printf("\033[7m"); // Invert text color (selected option)
                 menu_centered_item(strings[i], "", "", i - (totalOptions / 2) + 1);
-                printf("\033[0m\n"); // Reset text color
+                printf("%s\n", RESET); // Reset text color
             }
             else
             {

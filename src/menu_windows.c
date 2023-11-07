@@ -24,7 +24,7 @@ int arrow_menu(char *strings[], int size)
             {
                 printf("\033[7m"); // Invert text color (selected option)
                 menu_centered_item(strings[i], "", "", i);
-                printf("\033[0m\n"); // Reset text color
+                printf("%s\n", RESET); // Reset text color
             }
             else
             {
