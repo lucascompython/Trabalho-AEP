@@ -16,4 +16,6 @@ void enableRawMode(void);
 void disableRawMode(void);
 #endif
 
+void menu_principal(void);
+
 #endif // MENU_H

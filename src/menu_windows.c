@@ -11,6 +11,7 @@
 
 int arrow_menu(char *strings[], int size)
 {
+    clear_menu();
 
     int selectedOption = 0;
     int totalOptions = size;

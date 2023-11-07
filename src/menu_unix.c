@@ -28,6 +28,7 @@ void disableRawMode(void)
 
 int32_t arrow_menu(char *strings[], int32_t size)
 {
+    clear_menu();
     enableRawMode();
 
     int32_t selectedOption = 0;
