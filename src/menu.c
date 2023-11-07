@@ -1,34 +1,30 @@
 #include "menu.h"
-#include "term_size.h"
 #include "colors.h"
+#include "term_size.h"
 #include <stdint.h>
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 extern TerminalSize term_size; // from src/main.c
 
-void menu_item(char *string, char *color1, char *color2)
-{
-    int32_t string_size = strlen(string);
-    printf("\033[%d;%dH%s%s%s%s", term_size.rows, term_size.columns - string_size, color1,
-           color2, string, RESET);
+void menu_item(char *string, char *color1, char *color2) {
+  int32_t string_size = strlen(string);
+  printf("\033[%d;%dH%s%s%s%s", term_size.rows, term_size.columns - string_size,
+         color1, color2, string, RESET);
 }
 
-void menu_centered_item(char *string, char *color1,
-                        char *color2, int32_t row_offset)
-{
+void menu_centered_item(char *string, char *color1, char *color2,
+                        int32_t row_offset) {
 
-    int32_t string_size = strlen(string);
-    printf("\033[%d;%dH%s%s%s%s", (term_size.rows / 2) + row_offset, (term_size.columns - string_size) / 2,
-           color1, color2, string, RESET);
+  int32_t string_size = strlen(string);
+  printf("\033[%d;%dH%s%s%s%s", (term_size.rows / 2) + row_offset,
+         (term_size.columns - string_size) / 2, color1, color2, string, RESET);
 }
 
-void clear_menu(void)
-{
-    printf("\033[2J");
-}
+void clear_menu(void) { printf("\033[2J"); }
 
-void cursor_upLeft(void)
-{
-    printf("\033[H");
-}
+void cursor_upLeft(void) { printf("\033[H"); }
+
+void hide_cursor(void) { printf("\033[?25l"); }
+
+void show_cursor(void) { printf("\033[?25h"); }

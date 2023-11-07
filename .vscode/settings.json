@@ -2,6 +2,8 @@
   "files.associations": {
     "term_size.h": "c",
     "stdbool.h": "c",
-    "stdint.h": "c"
+    "stdint.h": "c",
+    "stdlib.h": "c",
+    "stdio.h": "c"
   }
 }
