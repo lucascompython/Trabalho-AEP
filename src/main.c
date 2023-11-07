@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void restoreCursor(int signal)
+void restoreCursor()
 {
   show_cursor();
 }
@@ -58,7 +58,7 @@ void menu_principal(void)
     menu_gestao_stocks();
     break;
   case 4:
-    exit(0);
+    return;
     break;
   default:
     exit(1);
@@ -90,6 +90,7 @@ int main(void)
   signal(SIGINT, restoreCursor);  // Ctrl + C
   signal(SIGTERM, restoreCursor); // kill
   signal(SIGSEGV, restoreCursor); // Segmentation fault
+  atexit(restoreCursor);
 
   if (get_terminal_size(&term_size) != 0)
   {
@@ -98,6 +99,6 @@ int main(void)
   }
 
   welcome_screen();
-  restoreCursor(0); // Restore cursor on exit
+  restoreCursor(); // Restore cursor on exit
   return 0;
 }
