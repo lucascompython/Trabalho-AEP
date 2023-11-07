@@ -5,7 +5,7 @@
 Instalar `clang` e `make` e depois:
 
 ```bash
-make run # compilar e exucutar
+make run # compilar e executar
 ```
 
 ## Windows
@@ -22,7 +22,7 @@ choco install make
 E depois executar:
 
 ```ps1
-make run # compilar e exucutar
+make run # compilar e executar
 ```
 
 OU  
