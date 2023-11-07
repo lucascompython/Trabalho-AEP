@@ -40,13 +40,13 @@ int32_t arrow_menu(char *strings[], int32_t size)
             if (i == selectedOption)
             {
                 printf("\033[7m"); // Invert text color (selected option)
-                menu_centered_item(strings[i], "", "", i);
+                menu_centered_item(strings[i], "", "", i - (totalOptions / 2) + 1);
                 printf("\033[0m\n"); // Reset text color
             }
             else
             {
 
-                menu_centered_item(strings[i], "", "", i);
+                menu_centered_item(strings[i], "", "", i - (totalOptions / 2) + 1);
                 puts("");
             }
         }
