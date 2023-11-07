@@ -76,7 +76,16 @@ void welcome_screen(void)
                      1);
   puts("");
 
+#ifdef __unix__ // temos que fazer isto para ler "qualquer" teclas no linux
+  enableRawMode();
+#endif
+
   getchar();
+
+#ifdef __unix__
+  enableRawMode();
+#endif
+
   clear_menu();
   menu_principal();
 }
