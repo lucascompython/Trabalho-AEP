@@ -1,7 +1,7 @@
 #include "term_size.h"
 
 #ifdef _WIN32
-
+#define WIN32_LEAN_AND_MEAN // Desativar coisas desnecessárias do windows.h
 #include <windows.h>
 
 int get_terminal_size(TerminalSize *size)
@@ -12,11 +12,11 @@ int get_terminal_size(TerminalSize *size)
 
         size->columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;
         size->rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
-        return 0; // Success
+        return 0; // Sucesso
     }
     else
     {
-        return -1; // Error
+        return -1; // Erro
     }
 }
 
@@ -32,11 +32,11 @@ int get_terminal_size(TerminalSize *size)
     {
         size->rows = ws.ws_row;
         size->columns = ws.ws_col;
-        return 0;
+        return 0; // Sucesso
     }
     else
     {
-        return -1;
+        return -1; // Erro
     }
 }
 

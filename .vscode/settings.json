@@ -4,6 +4,10 @@
     "stdbool.h": "c",
     "stdint.h": "c",
     "stdlib.h": "c",
-    "stdio.h": "c"
+    "stdio.h": "c",
+    "cstdlib": "c",
+    "memory_resource": "c",
+    "memory": "c",
+    "new": "c"
   }
 }

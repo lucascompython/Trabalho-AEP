@@ -2,6 +2,8 @@
 #define MAIN_H
 
 #define LENGTH(x) (sizeof(x) / sizeof((x)[0]))
+#define UNUSED(x) (void)(x)
+
 typedef enum
 {
   Ramos,

@@ -89,5 +89,8 @@ int32_t arrow_menu(char *strings[], int32_t size)
         cursor_upLeft();
     }
 }
+#elif _WIN32
+
+#pragma warning(disable : 4206) // Tirar aviso de "nonstandard extension used: translation unit is empty" porque este ficheiro só é usado no linux
 
 #endif

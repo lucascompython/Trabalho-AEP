@@ -10,10 +10,22 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef _WIN32
+#include <conio.h> // Para a welcome screen _getch() ler todas as teclas
+#endif
+
+#ifdef _WIN32
+void restoreCursor(int sig) // Windows queixa-se que os paremetros não são os mesmos
+{
+    UNUSED(sig); // unused parameter, tirar warning do windows
+    show_cursor();
+}
+#elif __unix__
 void restoreCursor()
 {
     show_cursor();
 }
+#endif
 
 TerminalSize term_size;
 
@@ -29,9 +41,10 @@ void welcome_screen(void)
 
 #ifdef __unix__ // temos que fazer isto para ler "qualquer" teclas no linux
     enableRawMode();
-#endif
-
     getchar();
+#elif _WIN32
+    _getch(); // ler qualquer tecla no windows
+#endif
 
     clear_menu();
     menu_principal();
@@ -40,13 +53,13 @@ void welcome_screen(void)
 int main(void)
 {
     setlocale(LC_ALL, "Portuguese.UTF8");
-
     hide_cursor();
+
     // restaure o cursor quando o programa terminar
     signal(SIGINT, restoreCursor);  // Ctrl + C
     signal(SIGTERM, restoreCursor); // kill
     signal(SIGSEGV, restoreCursor); // Segmentation fault
-    atexit(restoreCursor);          // Quando exit() é chamado
+    atexit(show_cursor);            // Quando exit() é chamado | Não é 'restoreCursor' porque o Windows queixa-se que os paremetros não são os mesmos
 
     if (get_terminal_size(&term_size) != 0)
     {
@@ -55,6 +68,6 @@ int main(void)
     }
 
     welcome_screen();
-    restoreCursor(); // Restore cursor on exit
+    show_cursor(); // Restaurar o cursor ao sair. Não é 'restoreCursor' porque o Windows queixa-se que os paremetros não são os mesmos
     return 0;
 }

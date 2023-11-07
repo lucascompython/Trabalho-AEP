@@ -1,9 +1,10 @@
+# Devido ao suporte limitado de Makefiles no Windows, este script foi criado para simular o comportamento de um Makefile no Windows (MSVC).
 param (
     [switch]$clean = $false,
     [switch]$release = $false,
     [switch]$run = $false
 )
-$CFLAGS = ""
+$CFLAGS = "/Wall /WX" # Mostrar todos os avisos e considerar avisos como erros
 $LDFLAGS = ""
 $sourceDir = "src"
 $outputDir = "build"
@@ -41,6 +42,10 @@ foreach ($file in $c_files) {
     # Compile the file
     
     "cl.exe $CFLAGS $relativePath -c -Fo:$outputPath" | Invoke-Expression
+    # Se o ultimo comando falhou, sair.
+    if ($LASTEXITCODE -ne 0) {
+        exit
+    }
 }
 
 # Link the object files
