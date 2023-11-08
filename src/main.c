@@ -2,6 +2,7 @@
 #include "colors.h"
 #include "menu.h"
 #include "term_size.h"
+#include "uuid.h"
 #include <locale.h>
 #include <signal.h>
 #include <stdbool.h>
@@ -15,16 +16,14 @@
 #endif
 
 #ifdef _WIN32
-void restoreCursor(int sig) // Windows queixa-se que os paremetros não são os mesmos
+void restoreCursor(
+    int sig) // Windows queixa-se que os paremetros não são os mesmos
 {
     UNUSED(sig); // unused parameter, tirar warning do windows
     show_cursor();
 }
 #elif __unix__
-void restoreCursor()
-{
-    show_cursor();
-}
+void restoreCursor() { show_cursor(); }
 #endif
 
 TerminalSize term_size;
@@ -54,6 +53,10 @@ int main(void)
 {
     setlocale(LC_ALL, "Portuguese.UTF8");
     hide_cursor();
+
+    char *uuid = uuid_gen();
+    printf("UUID: %s\n", uuid);
+    return 0;
 
     // restaure o cursor quando o programa terminar
     signal(SIGINT, restoreCursor);  // Ctrl + C

@@ -12,7 +12,7 @@ else
 # Compiler and flags
 CC = clang
 CFLAGS = -Wall -Wextra -Werror -std=c17
-LDFLAGS =
+LDFLAGS = -luuid # para uuid_gen
 
 # Compiler flags for the release build
 CFLAGS_RELEASE = -O2 -DNDEBUG -march=native
