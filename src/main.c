@@ -73,6 +73,16 @@ int main(void)
     welcome_screen();
     show_cursor(); // Restaurar o cursor ao sair. Não é 'restoreCursor' porque o Windows queixa-se que os paremetros não são os mesmos
     char *uuid = uuid_gen();
+
+#ifdef __unix__
+    if (uuid == NULL)
+    {
+        fprintf(stderr, "Erro a gerar UUID\n");
+        return 1;
+    }
+    printf("UUID: %s\n", uuid);
+    free(uuid);
+#endif
     printf("UUID: %s\n", uuid);
     return 0;
 }
