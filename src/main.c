@@ -1,6 +1,7 @@
 #include "main.h"
 #include "colors.h"
 #include "menu.h"
+#include "json.h"
 #include "term_size.h"
 #include "uuid.h"
 #include <locale.h>
@@ -53,6 +54,10 @@ void welcome_screen(void)
 int main(void)
 {
     setlocale(LC_ALL, "Portuguese.UTF8");
+
+    teste_json();
+    return 0;
+
 #ifdef _WIN32
     srand((unsigned int)time(NULL)); // seed para o uuid_gen() no Windows
 #endif
