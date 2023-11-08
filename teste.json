@@ -1,0 +1,14 @@
+{
+    "ramo_flores": {
+        "uuid": "ola",
+        "preco": 20.5,
+        "quantidade": 10,
+        "categoria": "ramos"
+    },
+    "jarro_flores": {
+        "uuid": "420420",
+        "preco": 59.99,
+        "quantidade": 5,
+        "categoria": "jarros"
+    }
+}

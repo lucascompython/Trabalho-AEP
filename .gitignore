@@ -1,4 +1,1 @@
 build
-#ignore everything that starts with 'teste'
-teste*
-jsmn.h
