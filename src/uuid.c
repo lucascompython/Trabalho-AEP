@@ -1,7 +1,5 @@
 #ifdef __unix__
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <uuid/uuid.h>
 
 char *uuid_gen(void)
