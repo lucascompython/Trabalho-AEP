@@ -13,6 +13,7 @@
 
 #ifdef _WIN32
 #include <conio.h> // Para a welcome screen _getch() ler todas as teclas
+#include <time.h>  // Para o srand() para uuid_gen()
 #endif
 
 #ifdef _WIN32
@@ -52,11 +53,10 @@ void welcome_screen(void)
 int main(void)
 {
     setlocale(LC_ALL, "Portuguese.UTF8");
+#ifdef _WIN32
+    srand((unsigned int)time(NULL)); // seed para o uuid_gen() no Windows
+#endif
     hide_cursor();
-
-    char *uuid = uuid_gen();
-    printf("UUID: %s\n", uuid);
-    return 0;
 
     // restaure o cursor quando o programa terminar
     signal(SIGINT, restoreCursor);  // Ctrl + C
@@ -72,5 +72,7 @@ int main(void)
 
     welcome_screen();
     show_cursor(); // Restaurar o cursor ao sair. Não é 'restoreCursor' porque o Windows queixa-se que os paremetros não são os mesmos
+    char *uuid = uuid_gen();
+    printf("UUID: %s\n", uuid);
     return 0;
 }
