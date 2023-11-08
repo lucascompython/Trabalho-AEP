@@ -8,11 +8,7 @@ char *uuid_gen(void)
 {
   uuid_t uuid;
   uuid_generate_random(uuid);
-  char *uuid_str = malloc(37);
-  if (uuid_str == NULL)
-  {
-    return NULL;
-  }
+  static char uuid_str[37];
   uuid_unparse(uuid, uuid_str);
   return uuid_str;
 }
