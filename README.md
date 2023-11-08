@@ -1,5 +1,12 @@
 # Intruções para compilar e executar o programa
 
+
+## Dependencias
+Neste projeto usamos [yyjson](https://github.com/ibireme/yyjson). Para instalar execute:
+```bash
+git submodule update --init --recursive
+```
+
 ## Linux
 
 Instalar `clang` e `make` e depois:
