@@ -11,14 +11,15 @@ typedef enum
   Jarros,
   CentrosMesa,
   OutasFlores
-} CategoriaProduto;
+} CategoriaArtigo;
 
 typedef struct
 {
-  int codigo_produto;
-  int preco;
+  char *nome;
+  char uuid[37];
+  float preco;
   int quantidade;
-  CategoriaProduto categoria;
+  CategoriaArtigo categoria;
 
 } Artigo;
 

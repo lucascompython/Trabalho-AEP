@@ -1,33 +1,113 @@
 #include "json.h"
-#include "../external/yyjson/src/yyjson.h"
-void teste_json(void)
+#include "yyjson.h" // external/yyjson/src
+#include "main.h"
+
+#define JSON_FILE "db.json"
+
+CategoriaArtigo str_to_categoria(const char *str)
 {
-    const char *json = "{\"name\":\"Mash\",\"star\":4,\"hits\":[2,2,1,3]}";
-
-    // Read JSON and get root
-    yyjson_doc *doc = yyjson_read(json, strlen(json), 0);
-    yyjson_val *root = yyjson_doc_get_root(doc);
-
-    // Get root["name"]
-    yyjson_val *name = yyjson_obj_get(root, "name");
-    printf("name: %s\n", yyjson_get_str(name));
-    printf("name length:%d\n", (int)yyjson_get_len(name));
-
-    // Get root["star"]
-    yyjson_val *star = yyjson_obj_get(root, "star");
-    printf("star: %d\n", (int)yyjson_get_int(star));
-
-    // Get root["hits"], iterate over the array
-    yyjson_val *hits = yyjson_obj_get(root, "hits");
-    size_t idx, max;
-    yyjson_val *hit;
-    yyjson_arr_foreach(hits, idx, max, hit)
+    if (strcmp(str, "Ramos") == 0)
     {
-        printf("hit%d: %d\n", (int)idx, (int)yyjson_get_int(hit));
+        return Ramos;
+    }
+    else if (strcmp(str, "Arranjos") == 0)
+    {
+        return Arranjos;
+    }
+    else if (strcmp(str, "Jarros") == 0)
+    {
+        return Jarros;
+    }
+    else if (strcmp(str, "CentrosMesa") == 0)
+    {
+        return CentrosMesa;
+    }
+    else if (strcmp(str, "OutasFlores") == 0)
+    {
+        return OutasFlores;
+    }
+    else
+    {
+        fprintf(stderr, "Categoria inválida\n");
+        exit(1);
+    }
+}
+
+char *categoria_to_str(CategoriaArtigo categoria)
+{
+    switch (categoria)
+    {
+    case Ramos:
+        return "Ramos";
+    case Arranjos:
+        return "Arranjos";
+    case Jarros:
+        return "Jarros";
+    case CentrosMesa:
+        return "CentrosMesa";
+    case OutasFlores:
+        return "OutasFlores";
+    default:
+        fprintf(stderr, "Categoria inválida\n");
+        exit(1);
+    }
+}
+
+void clean_artigos_array(Artigo *artigos, size_t size)
+{
+    for (size_t i = 0; i < size; i++)
+    {
+        free(artigos[i].nome);
+    }
+    free(artigos);
+}
+
+Artigo *get_artigos_array(size_t *size_artigos)
+{
+    yyjson_doc *doc = yyjson_read_file(JSON_FILE, 0, NULL, NULL);
+    if (!doc)
+    {
+        fprintf(stderr, "Erro ao ler o ficheiro JSON\n");
+        exit(1);
     }
 
-    // Free the doc
-    yyjson_doc_free(doc);
+    yyjson_val *root = yyjson_doc_get_root(doc);
 
-    // All functions accept NULL input, and return NULL on error.
+    size_t size = yyjson_obj_size(root);
+    *size_artigos = size;
+
+    Artigo *artigos = malloc(sizeof(Artigo) * size);
+    if (artigos == NULL)
+    {
+        fprintf(stderr, "Erro ao alocar memória para o array de artigos\n");
+        exit(1);
+    }
+
+    size_t idx, max;
+    yyjson_val *key, *val;
+
+    yyjson_obj_foreach(root, idx, max, key, val)
+    {
+        const char *nome = yyjson_get_str(key);
+        const char *uuid = yyjson_get_str(yyjson_obj_get(val, "uuid"));
+        float preco = yyjson_get_real(yyjson_obj_get(val, "preco"));
+        int quantidade = yyjson_get_int(yyjson_obj_get(val, "quantidade"));
+        const char *categoria = yyjson_get_str(yyjson_obj_get(val, "categoria"));
+
+        artigos[idx].nome = (char *)malloc(sizeof(char) * strlen(nome) + 1);
+        if (artigos[idx].nome == NULL)
+        {
+            fprintf(stderr, "Erro ao alocar memória para o nome do artigo\n");
+            exit(1);
+        }
+        strcpy(artigos[idx].nome, nome);
+
+        strncpy(artigos[idx].uuid, uuid, 37);
+        artigos[idx].preco = preco;
+        artigos[idx].quantidade = quantidade;
+        artigos[idx].categoria = str_to_categoria(categoria);
+    }
+
+    yyjson_doc_free(doc);
+    return artigos;
 }

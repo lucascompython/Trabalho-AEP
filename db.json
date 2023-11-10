@@ -1,0 +1,20 @@
+{
+    "ramo": {
+        "uuid": "350edc78-4543-4135-840f-9910ad59d752",
+        "preco": 20.5,
+        "quantidade": 10,
+        "categoria": "Ramos"
+    },
+    "jarro_flores": {
+        "uuid": "d79926ca-9d6a-409e-9429-611c83a30da6",
+        "preco": 59.99,
+        "quantidade": 5,
+        "categoria": "Jarros"
+    },
+    "centros_mesa_rosas": {
+        "uuid": "562405d1-5269-4422-91dc-d6287223157a",
+        "preco": 100.0,
+        "quantidade": 1,
+        "categoria": "CentrosMesa"
+    }
+}

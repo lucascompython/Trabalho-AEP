@@ -9,6 +9,8 @@
     "memory_resource": "c",
     "memory": "c",
     "new": "c",
-    "uuid.h": "c"
+    "uuid.h": "c",
+    "yyjson.h": "c",
+    "main.h": "c"
   }
 }

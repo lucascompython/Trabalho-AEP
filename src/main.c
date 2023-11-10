@@ -55,8 +55,20 @@ int main(void)
 {
     setlocale(LC_ALL, "Portuguese.UTF8");
 
-    teste_json();
-    return 0;
+    size_t size_artigos;
+    Artigo *artigos = get_artigos_array(&size_artigos);
+    puts("----------------------");
+    for (size_t i = 0; i < size_artigos; i++)
+    {
+        printf("NOME: %s\n", artigos[i].nome);
+        printf("CATEGORIA: %s\n", categoria_to_str(artigos[i].categoria));
+        printf("PRECO: %f\n", artigos[i].preco);
+        printf("QUANTIDADE: %d\n", artigos[i].quantidade);
+        printf("UUID: %s\n", artigos[i].uuid);
+        puts("----------------------");
+    }
+    clean_artigos_array(artigos, size_artigos);
+    return 0; // teste
 
 #ifdef _WIN32
     srand((unsigned int)time(NULL)); // seed para o uuid_gen() no Windows
