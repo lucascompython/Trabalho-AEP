@@ -85,7 +85,7 @@ int main(void)
         printf("NOME: %s\n", artigos[i].nome);
         printf("CATEGORIA: %s\n", categoria_to_str(artigos[i].categoria));
         printf("PRECO: %f\n", artigos[i].preco);
-        printf("QUANTIDADE: %lld\n", artigos[i].quantidade);
+        printf("QUANTIDADE: %ld\n", artigos[i].quantidade);
         printf("UUID: %s\n", artigos[i].uuid);
         puts("----------------------");
     }

@@ -62,6 +62,15 @@ void clean_artigos_array(Artigo *artigos, size_t size)
     free(artigos);
 }
 
+void copy_str(char *dest, const char *src, size_t size)
+{
+#ifdef __unix__
+    strncpy(dest, src, size);
+#elif _WIN32
+    strcpy_s(dest, size, src);
+#endif
+}
+
 Artigo *get_artigos_array(size_t *size_artigos)
 {
     yyjson_doc *doc = yyjson_read_file(JSON_FILE, 0, NULL, NULL);
@@ -102,9 +111,10 @@ Artigo *get_artigos_array(size_t *size_artigos)
             fprintf(stderr, "Erro ao alocar memória para o nome do artigo\n");
             exit(1);
         }
-        strcpy_s(artigos[idx].nome, nome_size, nome);
 
-        strcpy_s(artigos[idx].uuid, 37, uuid);
+        copy_str(artigos[idx].nome, nome, nome_size);
+        copy_str(artigos[idx].uuid, uuid, 37);
+
         artigos[idx].preco = preco;
         artigos[idx].quantidade = quantidade;
         artigos[idx].categoria = str_to_categoria(categoria);
