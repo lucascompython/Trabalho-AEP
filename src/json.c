@@ -121,3 +121,32 @@ Artigo *get_artigos_array(size_t *size_artigos)
     yyjson_doc_free(doc);
     return artigos;
 }
+
+void save_artigos_array(Artigo *artigos, size_t size)
+{
+    yyjson_mut_doc *doc = yyjson_mut_doc_new(NULL);
+    yyjson_mut_val *root = yyjson_mut_obj(doc);
+
+    for (size_t i = 0; i < size; i++)
+    {
+        yyjson_mut_val *key = yyjson_mut_strn(doc, artigos[i].nome, strlen(artigos[i].nome));
+        yyjson_mut_val *obj = yyjson_mut_obj(doc);
+
+        yyjson_mut_val *uuid = yyjson_mut_strn(doc, artigos[i].uuid, 36);
+        yyjson_mut_val *preco = yyjson_mut_real(doc, artigos[i].preco);
+        yyjson_mut_val *quantidade = yyjson_mut_uint(doc, artigos[i].quantidade);
+        yyjson_mut_val *categoria = yyjson_mut_strn(doc, categoria_to_str(artigos[i].categoria), strlen(categoria_to_str(artigos[i].categoria)));
+
+        yyjson_mut_obj_add(obj, yyjson_mut_str(doc, "uuid"), uuid);
+        yyjson_mut_obj_add(obj, yyjson_mut_str(doc, "preco"), preco);
+        yyjson_mut_obj_add(obj, yyjson_mut_str(doc, "quantidade"), quantidade);
+        yyjson_mut_obj_add(obj, yyjson_mut_str(doc, "categoria"), categoria);
+
+        yyjson_mut_obj_add(root, key, obj);
+    }
+
+    yyjson_mut_doc_set_root(doc, root);
+
+    yyjson_mut_write_file(STOCK_JSON_FILE, doc, YYJSON_WRITE_PRETTY, NULL, NULL);
+    yyjson_mut_doc_free(doc);
+}

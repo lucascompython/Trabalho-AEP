@@ -82,6 +82,11 @@ int main(void)
 
     size_t size_artigos;
     Artigo *artigos = get_artigos_array(&size_artigos);
+    artigos[0].preco = 69.0;
+
+    // set new UUID
+    copy_str(artigos[0].uuid, uuid, 37);
+
     puts("----------------------");
     for (size_t i = 0; i < size_artigos; i++)
     {
@@ -92,6 +97,8 @@ int main(void)
         printf("UUID: %s\n", artigos[i].uuid);
         puts("----------------------");
     }
+
+    save_artigos_array(artigos, size_artigos);
     clean_artigos_array(artigos, size_artigos);
     return 0;
 }
