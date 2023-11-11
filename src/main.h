@@ -4,6 +4,8 @@
 #define LENGTH(x) (sizeof(x) / sizeof((x)[0]))
 #define UNUSED(x) (void)(x)
 
+#include <stdint.h>
+
 typedef enum
 {
   Ramos,
@@ -11,15 +13,15 @@ typedef enum
   Jarros,
   CentrosMesa,
   OutasFlores
-} CategoriaProduto;
+} CategoriaArtigo;
 
 typedef struct
 {
-  int codigo_produto;
-  int preco;
-  int quantidade;
-  CategoriaProduto categoria;
+  char uuid[37];
+  char *nome;
+  CategoriaArtigo categoria;
+  double preco;
+  uint64_t quantidade;
 
 } Artigo;
-
 #endif

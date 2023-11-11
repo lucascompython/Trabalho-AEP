@@ -1,6 +1,7 @@
 #include "main.h"
 #include "colors.h"
 #include "menu.h"
+#include "json.h"
 #include "term_size.h"
 #include "uuid.h"
 #include <locale.h>
@@ -15,6 +16,8 @@
 #include <conio.h> // Para a welcome screen _getch() ler todas as teclas
 #include <time.h>  // Para o srand() para uuid_gen()
 #endif
+
+// TODO: IVA
 
 #ifdef _WIN32
 void restoreCursor(
@@ -53,6 +56,7 @@ void welcome_screen(void)
 int main(void)
 {
     setlocale(LC_ALL, "Portuguese.UTF8");
+
 #ifdef _WIN32
     srand((unsigned int)time(NULL)); // seed para o uuid_gen() no Windows
 #endif
@@ -75,5 +79,26 @@ int main(void)
 
     char *uuid = uuid_gen();
     printf("UUID: %s\n", uuid);
+
+    size_t size_artigos;
+    Artigo *artigos = get_artigos_array(&size_artigos);
+    artigos[0].preco = 69.0;
+
+    // set new UUID
+    copy_str(artigos[0].uuid, uuid, 37);
+
+    puts("----------------------");
+    for (size_t i = 0; i < size_artigos; i++)
+    {
+        printf("NOME: %s\n", artigos[i].nome);
+        printf("CATEGORIA: %d\n", artigos[i].categoria);
+        printf("PRECO: %f\n", artigos[i].preco);
+        printf("QUANTIDADE: %ld\n", artigos[i].quantidade);
+        printf("UUID: %s\n", artigos[i].uuid);
+        puts("----------------------");
+    }
+
+    save_artigos_array(artigos, size_artigos);
+    clean_artigos_array(artigos, size_artigos);
     return 0;
 }

@@ -11,7 +11,7 @@ else
 
 # Compiler and flags
 CC = clang
-CFLAGS = -Wall -Wextra -Werror -std=c17
+CFLAGS = -Wall -Wextra -Werror -std=c17 -I./external/yyjson/src # Mostrar todos os avisos e tratá-los como erros, usar C17 e incluir yyjson
 LDFLAGS = -luuid # para uuid_gen
 
 # Compiler flags for the release build
@@ -23,7 +23,7 @@ SRC_DIR = src
 BUILD_DIR = build
 
 # Source files
-SRCS = $(wildcard $(SRC_DIR)/*.c)
+SRCS = $(wildcard $(SRC_DIR)/*.c) external/yyjson/src/yyjson.c # Todos os ficheiros .c na pasta src e o yyjson.c 
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRCS))
 
 # Executable name

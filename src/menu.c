@@ -47,11 +47,19 @@ void menu_modificar(void)
 }
 void menu_estatisticas(void)
 {
-    printf("Estatisticas\n");
+    char *options[] = {
+        "Stock", // Alto e baixo preços | Quantidade maior e menor
+        "Vendas",
+        "Quebras", // Lixo | menu btop filtrar por categoria e total
+        "Voltar"};
+
+    int32_t totalOptions = (int)LENGTH(options);
+    int32_t result = arrow_menu(options, totalOptions);
+    printf("result: %d\n", result);
 }
 void menu_simular_vendas(void)
 {
-    printf("Simular vendas\n");
+    printf("Simular vendas\n"); // menu nmtui | nome, codigo, preço, (quantidade) | guardar fatura num ficheiro txt
 }
 
 void menu_principal(void)

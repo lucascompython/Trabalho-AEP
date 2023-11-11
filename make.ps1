@@ -4,7 +4,7 @@ param (
     [switch]$release = $false,
     [switch]$run = $false
 )
-$CFLAGS = "/Wall /WX" # Mostrar todos os avisos e considerar avisos como erros
+$CFLAGS = "/Wall /WX /Iexternal\yyjson\src /wd4820 /wd4296 /wd5045" # Mostrar todos os avisos e considerar avisos como erros (Wall e WX) | Incluir o diretório de cabeçalhos do yyjson | Desativar avisos de padding e de conversão implícita
 $LDFLAGS = ""
 $sourceDir = "src"
 $outputDir = "build"
@@ -19,7 +19,7 @@ if ($clean) {
 
 
 if ($release) {
-    $CFLAGS += "-O2 -Z7 -MD"
+    $CFLAGS += " -O2 -MD /wd4711 /wd4710" # Otimizar para velocidade (O2) | Desativar avisos de função inline
     $LDFLAGS += ""
 }
 
@@ -27,9 +27,15 @@ if (!(Test-Path "build")) {
     New-Item -ItemType Directory -Path "build"
 }
 
+# List of source files in yyjson\src
+$yyjson_src_files = Get-ChildItem -Path "external\yyjson\src" -Recurse -Include "*.c"
 
-# Get the list of .c files in the source directory and its subdirectories
-$c_files = Get-ChildItem -Path $sourceDir -Recurse -Include "*.c" 
+# List of source files in your project (excluding yyjson\src)
+$project_src_files = Get-ChildItem -Path $sourceDir -Recurse -Include "*.c" 
+
+# Concatenate the two lists
+$c_files = @($yyjson_src_files) + @($project_src_files)
+
 foreach ($file in $c_files) {
     # Get the relative path of the file
     $relativePath = $file.FullName -replace [regex]::Escape($PWD.Path) + '\\' 
@@ -37,10 +43,10 @@ foreach ($file in $c_files) {
     $outputPath = $relativePath -replace [regex]::Escape($sourceDir), $outputDir
     # Replace the .c extension with .obj
     $outputPath = $outputPath -replace '\.c$', '.obj'
-    # Create the output directory if it doesn't exist
-    $outputDir = Split-Path $outputPath
+    # Remove the external\yyjson prefix
+    $outputPath = $outputPath -replace [regex]::Escape('external\yyjson\'), ''
+
     # Compile the file
-    
     "cl.exe $CFLAGS $relativePath -c -Fo:$outputPath" | Invoke-Expression
     # Se o ultimo comando falhou, sair.
     if ($LASTEXITCODE -ne 0) {
@@ -51,7 +57,7 @@ foreach ($file in $c_files) {
 # Link the object files
 cl.exe $LDFLAGS $outputDir\*.obj -link -out:$outputDir\$target
 
-if ($run) {
+if ($run -and $LASTEXITCODE -eq 0) {
     & ".\$outputDir\$target"
 }
 

@@ -10,9 +10,6 @@
 #define ARROW_DOWN 80
 #define ENTER 13
 
-// https://learn.microsoft.com/en-us/cpp/error-messages/compiler-warnings/c5045?view=msvc-170
-#pragma warning(disable : 5045) // Desativar aviso de Spectre mitigations porque o nosso 'i' é seguro e não vai out-of-bounds
-
 int arrow_menu(char *strings[], int size)
 {
     clear_menu();
