@@ -4,7 +4,7 @@ param (
     [switch]$release = $false,
     [switch]$run = $false
 )
-$CFLAGS = "/Wall /WX" # Mostrar todos os avisos e considerar avisos como erros
+$CFLAGS = "/Wall /WX /Iexternal\yyjson\src" # Mostrar todos os avisos e considerar avisos como erros
 $LDFLAGS = ""
 $sourceDir = "src"
 $outputDir = "build"
