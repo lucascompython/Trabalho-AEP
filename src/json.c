@@ -89,25 +89,26 @@ Artigo *get_artigos_array(size_t *size_artigos)
     yyjson_obj_foreach(root, idx, max, key, val)
     {
         const char *nome = yyjson_get_str(key);
+        const size_t nome_size = sizeof(char) * strlen(nome) + 1; // 1 * strlen(nome) + 1 (terminador de string)
+        printf("NOME LEN: %zu\n", nome_size);
         const char *uuid = yyjson_get_str(yyjson_obj_get(val, "uuid"));
-        double preco = yyjson_get_real(yyjson_obj_get(val, "preco"));
-        int quantidade = yyjson_get_int(yyjson_obj_get(val, "quantidade"));
+        double preco = yyjson_get_num(yyjson_obj_get(val, "preco"));
+        uint64_t quantidade = yyjson_get_uint(yyjson_obj_get(val, "quantidade"));
         const char *categoria = yyjson_get_str(yyjson_obj_get(val, "categoria"));
 
-        artigos[idx].nome = (char *)malloc(sizeof(char) * strlen(nome) + 1);
+        artigos[idx].nome = (char *)malloc(nome_size);
         if (artigos[idx].nome == NULL)
         {
             fprintf(stderr, "Erro ao alocar memória para o nome do artigo\n");
             exit(1);
         }
-        strcpy_s(artigos[idx].nome, sizeof(nome), nome);
+        strcpy_s(artigos[idx].nome, nome_size, nome);
 
         strcpy_s(artigos[idx].uuid, 37, uuid);
         artigos[idx].preco = preco;
         artigos[idx].quantidade = quantidade;
         artigos[idx].categoria = str_to_categoria(categoria);
     }
-
     yyjson_doc_free(doc);
     return artigos;
 }

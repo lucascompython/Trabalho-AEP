@@ -4,9 +4,7 @@
 #define LENGTH(x) (sizeof(x) / sizeof((x)[0]))
 #define UNUSED(x) (void)(x)
 
-#ifdef _WIN32
-#pragma warning(disable : 4820)
-#endif
+#include <stdint.h>
 
 typedef enum
 {
@@ -22,8 +20,8 @@ typedef struct
   char uuid[37];
   char *nome;
   CategoriaArtigo categoria;
-  float preco;
-  int quantidade;
+  double preco;
+  uint64_t quantidade;
 
 } Artigo;
 #endif
