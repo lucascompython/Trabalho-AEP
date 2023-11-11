@@ -90,7 +90,7 @@ Artigo *get_artigos_array(size_t *size_artigos)
     {
         const char *nome = yyjson_get_str(key);
         const char *uuid = yyjson_get_str(yyjson_obj_get(val, "uuid"));
-        float preco = yyjson_get_real(yyjson_obj_get(val, "preco"));
+        double preco = yyjson_get_real(yyjson_obj_get(val, "preco"));
         int quantidade = yyjson_get_int(yyjson_obj_get(val, "quantidade"));
         const char *categoria = yyjson_get_str(yyjson_obj_get(val, "categoria"));
 
@@ -100,9 +100,9 @@ Artigo *get_artigos_array(size_t *size_artigos)
             fprintf(stderr, "Erro ao alocar memória para o nome do artigo\n");
             exit(1);
         }
-        strcpy(artigos[idx].nome, nome);
+        strcpy_s(artigos[idx].nome, sizeof(nome), nome);
 
-        strncpy(artigos[idx].uuid, uuid, 37);
+        strcpy_s(artigos[idx].uuid, 37, uuid);
         artigos[idx].preco = preco;
         artigos[idx].quantidade = quantidade;
         artigos[idx].categoria = str_to_categoria(categoria);
