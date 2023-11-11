@@ -17,6 +17,8 @@
 #include <time.h>  // Para o srand() para uuid_gen()
 #endif
 
+// TODO: IVA
+
 #ifdef _WIN32
 void restoreCursor(
     int sig) // Windows queixa-se que os paremetros não são os mesmos
@@ -77,13 +79,14 @@ int main(void)
 
     char *uuid = uuid_gen();
     printf("UUID: %s\n", uuid);
+
     size_t size_artigos;
     Artigo *artigos = get_artigos_array(&size_artigos);
     puts("----------------------");
     for (size_t i = 0; i < size_artigos; i++)
     {
         printf("NOME: %s\n", artigos[i].nome);
-        printf("CATEGORIA: %s\n", categoria_to_str(artigos[i].categoria));
+        printf("CATEGORIA: %d\n", artigos[i].categoria);
         printf("PRECO: %f\n", artigos[i].preco);
         printf("QUANTIDADE: %ld\n", artigos[i].quantidade);
         printf("UUID: %s\n", artigos[i].uuid);

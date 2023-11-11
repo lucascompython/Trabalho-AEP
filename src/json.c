@@ -85,7 +85,7 @@ Artigo *get_artigos_array(size_t *size_artigos)
     size_t size = yyjson_obj_size(root);
     *size_artigos = size;
 
-    Artigo *artigos = malloc(sizeof(Artigo) * size);
+    Artigo *artigos = (Artigo *)malloc(sizeof(Artigo) * size);
     if (artigos == NULL)
     {
         fprintf(stderr, "Erro ao alocar memória para o array de artigos\n");
@@ -99,7 +99,6 @@ Artigo *get_artigos_array(size_t *size_artigos)
     {
         const char *nome = yyjson_get_str(key);
         const size_t nome_size = sizeof(char) * strlen(nome) + 1; // 1 * strlen(nome) + 1 (terminador de string)
-        printf("NOME LEN: %zu\n", nome_size);
         const char *uuid = yyjson_get_str(yyjson_obj_get(val, "uuid"));
         double preco = yyjson_get_num(yyjson_obj_get(val, "preco"));
         uint64_t quantidade = yyjson_get_uint(yyjson_obj_get(val, "quantidade"));
