@@ -2,7 +2,7 @@
 #include "yyjson.h" // external/yyjson/src
 #include "main.h"
 
-#define JSON_FILE "db.json"
+#define STOCK_JSON_FILE "stock.json"
 
 CategoriaArtigo str_to_categoria(const char *str)
 {
@@ -73,7 +73,7 @@ void copy_str(char *dest, const char *src, size_t size)
 
 Artigo *get_artigos_array(size_t *size_artigos)
 {
-    yyjson_doc *doc = yyjson_read_file(JSON_FILE, 0, NULL, NULL);
+    yyjson_doc *doc = yyjson_read_file(STOCK_JSON_FILE, 0, NULL, NULL);
     if (!doc)
     {
         fprintf(stderr, "Erro ao ler o ficheiro JSON\n");
