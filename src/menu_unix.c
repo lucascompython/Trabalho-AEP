@@ -217,16 +217,8 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
         }
         else if (c == '\n')
         { // Enter Key
-            if (selectedButton == 1)
-            {
-                disableRawMode();
-                return 1;
-            }
-            else
-            {
-                disableRawMode();
-                return 0;
-            }
+            disableRawMode();
+            return selectedButton;
         }
         else if (c == 127)
         { // Backspace
@@ -247,14 +239,6 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
                 }
             }
         }
-        else if (c == 32) // Barra de espaço
-        {
-            if (selectedItem > 3)
-            {
-                selectedCheckbox = selectedItem - 4;
-            }
-        }
-
         else
         { // Handle input characters
             if (selectedItem >= 0 && selectedItem <= inputItemsSize - 1 && !inputItems[selectedItem].isCheckbox)
@@ -274,16 +258,14 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
                 }
             }
         }
-        // else if (c >= 32 && c <= 126)
-        // { // Printable characters
-        //     if (selectedButton == 1)
-        //     {
-        //         if (strlen(inputItems[selectedItem].input) < maxInputSize)
-        //         {
-        //             inputItems[selectedItem].input[strlen(inputItems[selectedItem].input)] = c;
-        //         }
-        //     }
-        // }
+        if (c == 32) // Barra de espaço
+        {
+            if (selectedItem > 3)
+            {
+                selectedCheckbox = selectedItem - 4;
+            }
+        }
+
         cursor_upLeft();
         clear_menu();
     }
