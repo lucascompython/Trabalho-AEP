@@ -1,1 +1,14 @@
-{}
+{
+    "Jarro Tulipas": {
+        "uuid": "c441bb85-dc66-4db5-a1db-f532f963de99",
+        "preco": 69.0,
+        "quantidade": 10,
+        "categoria": "Jarros"
+    },
+    "Jarro Rosas": {
+        "uuid": "c441bb85-dc66-4db5-a1db-f532f963de99",
+        "preco": 49.0,
+        "quantidade": 60,
+        "categoria": "Jarros"
+    }
+}
