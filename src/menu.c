@@ -315,7 +315,7 @@ void menu_modificar(void)
         enableRawMode();
         getchar();
 #elif _WIN32
-        _getch(); // ler qualquer tecla no windows
+        _getch();     // ler qualquer tecla no windows
 #endif
         menu_principal();
         break;
@@ -330,10 +330,10 @@ void menu_modificar(void)
     }
 }
 
-int32_t get_category_count(Artigo *artigos, int32_t size)
+int32_t get_category_count(void)
 {
     int32_t categoryCount = 0;
-    for (int32_t i = 0; i < size; i++)
+    for (size_t i = 0; i < size_artigos; i++)
     {
         if ((int32_t)artigos[i].categoria > categoryCount)
         {
@@ -375,7 +375,7 @@ void menu_estatisticas(void)
         cursor_upLeft();
         clear_menu();
 
-        int32_t categoriaCount = get_category_count(artigos, size_artigos);
+        int32_t categoriaCount = get_category_count();
 
         int32_t *categoryCounts = (int32_t *)malloc(sizeof(int32_t) * categoriaCount);
         double *categoryTotalPrices = (double *)malloc(sizeof(double) * categoriaCount);
@@ -403,7 +403,11 @@ void menu_estatisticas(void)
         }
 
         char header[60];
+#ifdef __unix__
         sprintf(header, "%-20s | %10s | %7s\n", "Categoria", "Quantidade", "Preço");
+#elif _WIN32
+        sprintf_s(header, 60, "%-20s | %10s | %7s\n", "Categoria", "Quantidade", "Preço");
+#endif
         menu_centered_item(header, "", "", 0);
 
         char linhas[60] = "----------------------|------------|---------\n";
@@ -412,18 +416,28 @@ void menu_estatisticas(void)
         {
             char *categoriaStr = categoria_to_str(i);
             char quantidade[40];
-            sprintf(quantidade, "%10d", categoryCounts[i]);
             char precoCategoriaStr[40];
-            sprintf(precoCategoriaStr, "%7.2f€", categoryTotalPrices[i]);
             char linha[120];
+#ifdef __unix__
+            sprintf(quantidade, "%10d", categoryCounts[i]);
+            sprintf(precoCategoriaStr, "%7.2f€", categoryTotalPrices[i]);
             sprintf(linha, "%-21s | %s | %s", categoriaStr, quantidade, precoCategoriaStr);
+#elif _WIN32
+            sprintf_s(quantidade, 40, "%10d", categoryCounts[i]);
+            sprintf_s(precoCategoriaStr, 40, "%7.2f€", categoryTotalPrices[i]);
+            sprintf_s(linha, 120, "%-22s | %s | %s", categoriaStr, quantidade, precoCategoriaStr);
+#endif
             menu_centered_item(linha, "", "", i + 2);
         }
 
         menu_centered_item(linhas, "", "", categoriaCount + 2);
         // Print total price
         char precoTotalStr[40];
+#ifdef __unix__
         sprintf(precoTotalStr, "Preço Total: %.2f\n", precoTotal);
+#elif _WIN32
+        sprintf_s(precoTotalStr, 40, "Preço Total: %.2f\n", precoTotal);
+#endif
         menu_centered_item(precoTotalStr, BOLD, UNDERLINE, categoriaCount + 3);
 
         menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", categoriaCount + 5);
