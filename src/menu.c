@@ -35,7 +35,16 @@ void show_cursor(void) { printf("\033[?25h"); }
 
 void menu_introduzir_artigo(void)
 {
-    printf("Introduzir artigo\n");
+
+    Input inputItems[] = {
+        {"Nome", ""},
+        {"Preço", ""},
+        {"Quantidade", ""},
+    };
+    Artigo artigo;
+    int32_t result = input_menu(&artigo, inputItems, LENGTH(inputItems));
+    printf("result: %d\n", result);
+    printf("Nome: %s\n", inputItems[0].input);
 }
 void menu_listar(void)
 {
