@@ -553,12 +553,9 @@ void menu_estatisticas(void)
             }
         }
 
-        // Initialize an array to store the number of trashed products for each category
         int32_t *trashedCounts = (int32_t *)calloc(categoriaCount, sizeof(int32_t));
 
-        // Initialize a variable to store the total value going to the trash
         double trashTotal = 0.0;
-        // Calculate the number of trashed products and the total value going to the trash
         for (int32_t i = 0; i < categoriaCount; i++)
         {
             double trashPercentage;
@@ -658,12 +655,7 @@ void menu_estatisticas(void)
     }
 }
 void menu_simular_vendas(void)
-{ // Simular vendas
-  // O utlizador pode escolher um artigo e a quantidade
-  // O programa vai subtrair a quantidade escolhida ao stock
-  // O programa vai guardar a fatura num ficheiro txt
-  // O programa vai mostrar a fatura
-  // O programa vai escrever a venda num ficheiro json (vendas.json)
+{
 
     if (size_artigos == 0)
     {
@@ -731,16 +723,6 @@ void menu_simular_vendas(void)
     switch (result)
     {
     case 0:
-        // copy_str(artigos[selectedArtigo].nome, inputItems[0].input, strlen(inputItems[0].input) + 1);
-        // artigos[selectedArtigo].preco = atof(inputItems[1].input);
-        // artigos[selectedArtigo].quantidade = atoi(inputItems[2].input);
-        // artigos[selectedArtigo].categoria = atoi(inputItems[3].input);
-
-        // free(artigosOptions);
-        // clear_menu();
-        // menu_centered_item("Artigo modificado com sucesso!", GREEN, UNDERLINE, 0);
-        // menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
-
         // realloc artigos_vendidos
         size_artigos_vendidos++;
         artigos_vendidos = realloc(artigos_vendidos, sizeof(Artigo) * (size_artigos_vendidos));
