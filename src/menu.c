@@ -316,7 +316,7 @@ void menu_modificar(void)
         enableRawMode();
         getchar();
 #elif _WIN32
-        _getch();     // ler qualquer tecla no windows
+        _getch(); // ler qualquer tecla no windows
 #endif
         menu_principal();
         break;
@@ -544,7 +544,7 @@ void menu_estatisticas(void)
 #ifdef __unix__
             sprintf(quantidade, "%10d", categoryCounts[i]);
             sprintf(desperdicio, "%10d", trashedCounts[i]);
-            sprintf(linha, "%-18s | %s | %s", categoriaStr, quantidade, desperdicio);
+            sprintf(linha, "%-17s | %s | %s", categoriaStr, quantidade, desperdicio);
 #elif _WIN32
             sprintf_s(quantidade, 40, "%10d", categoryCounts[i]);
             sprintf_s(desperdicio, 40, "%10d", trashedCounts[i]);
