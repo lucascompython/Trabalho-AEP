@@ -124,7 +124,7 @@ void menu_introduzir_artigo(void)
 
     Input inputItems[] = {
         {.label = "Nome", .input = "", .isCheckbox = 0},
-        {.label = "Preco", .input = "", .isCheckbox = 0},
+        {.label = "Preço (€)", .input = "", .isCheckbox = 0},
         {.label = "Quantidade", .input = "", .isCheckbox = 0},
         {.label = "Categoria", .input = "", .isCheckbox = 1, .checkBoxOptions = {"Ramos", "Arranjos", "Jarros", "CentrosMesa", "OutrasFlores"}},
     };
@@ -185,7 +185,7 @@ void menu_modificar(void)
     int32_t selectedArtigo = arrow_menu(artigosOptions, size_artigos);
 
     char preco[40];
-    sprintf(preco, "%f", artigos[selectedArtigo].preco);
+    sprintf(preco, "%.2f", artigos[selectedArtigo].preco);
     char quantidade[40];
     sprintf(quantidade, "%ld", artigos[selectedArtigo].quantidade);
     char nome[40];
@@ -195,7 +195,7 @@ void menu_modificar(void)
 
     Input inputItems[] = {
         {.label = "Nome", .isCheckbox = 0},
-        {.label = "Preco", .isCheckbox = 0},
+        {.label = "Preço (€)", .isCheckbox = 0},
         {.label = "Quantidade", .isCheckbox = 0},
         {.label = "Categoria", .isCheckbox = 1, .checkBoxOptions = {"Ramos", "Arranjos", "Jarros", "CentrosMesa", "OutrasFlores"}},
     };
