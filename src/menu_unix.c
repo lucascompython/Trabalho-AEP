@@ -119,12 +119,12 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
             {
                 if (i == selectedItem)
                 {
-                    printMenuItem(inputItems[i], 1, (i + 1) - (inputItemsSize / 2));
+                    printMenuItem(inputItems[i], 1, (i + 1) - ((inputItemsSize + 5) / 2));
                 }
                 else
                 {
 
-                    printMenuItem(inputItems[i], 0, (i + 1) - (inputItemsSize / 2));
+                    printMenuItem(inputItems[i], 0, (i + 1) - ((inputItemsSize + 5) / 2));
                 }
 
                 for (int j = 0; j < 5; j++)
@@ -135,12 +135,12 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
                         if (selectedItem > 3 && selectedItem == j + 4)
                         {
 
-                            printMenuCheckbox(inputItems[i].checkBoxOptions[j], 1, 1, (i + 1) - (inputItemsSize / 2) + j + 1);
+                            printMenuCheckbox(inputItems[i].checkBoxOptions[j], 1, 1, i - (inputItemsSize / 2) + j);
                         }
                         else
                         {
 
-                            printMenuCheckbox(inputItems[i].checkBoxOptions[j], 0, 1, (i + 1) - (inputItemsSize / 2) + j + 1);
+                            printMenuCheckbox(inputItems[i].checkBoxOptions[j], 0, 1, i - (inputItemsSize / 2) + j);
                         }
                     }
                     else
@@ -148,12 +148,12 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
                         if (selectedItem > 3 && selectedItem == j + 4)
                         {
 
-                            printMenuCheckbox(inputItems[i].checkBoxOptions[j], 1, 0, (i + 1) - (inputItemsSize / 2) + j + 1);
+                            printMenuCheckbox(inputItems[i].checkBoxOptions[j], 1, 0, i - (inputItemsSize / 2) + j);
                         }
                         else
                         {
 
-                            printMenuCheckbox(inputItems[i].checkBoxOptions[j], 0, 0, (i + 1) - (inputItemsSize / 2) + j + 1);
+                            printMenuCheckbox(inputItems[i].checkBoxOptions[j], 0, 0, i - (inputItemsSize / 2) + j);
                         }
                     }
                 }
@@ -162,22 +162,22 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
 
             if (i == selectedItem)
             {
-                printMenuItem(inputItems[i], 1, i - (inputItemsSize / 2) + 1);
+                printMenuItem(inputItems[i], 1, i - ((inputItemsSize + 5) / 2) + 1);
             }
             else
             {
-                printMenuItem(inputItems[i], 0, i - (inputItemsSize / 2) + 1);
+                printMenuItem(inputItems[i], 0, i - ((inputItemsSize + 5) / 2) + 1);
             }
         }
 
         if (selectedButton == 1)
         {
-            printf("\033[%d;%dH\033[7m[OK]\033[0m   [Cancelar]\n", (term_size.rows / 2) + inputItemsSize + 5,
+            printf("\033[%d;%dH\033[7m[OK]\033[0m   [Cancelar]\n", (term_size.rows / 2) + inputItemsSize + 2,
                    (term_size.columns - 17) / 2); // 17 é o tamanho da string "[OK]   [Cancel]"
         }
         else
         {
-            printf("\033[%d;%dH[OK]   \033[7m[Cancelar]\033[0m\n", (term_size.rows / 2) + inputItemsSize + 5,
+            printf("\033[%d;%dH[OK]   \033[7m[Cancelar]\033[0m\n", (term_size.rows / 2) + inputItemsSize + 2,
                    (term_size.columns - 17) / 2); // 17 é o tamanho da string "[OK]   [Cancel]"
         }
 
