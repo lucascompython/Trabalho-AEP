@@ -15,6 +15,12 @@ void printMenuItem(Input item, int32_t isSelected, int32_t offset)
     int inputLength = strlen(item.input);
     if (isSelected)
     {
+        if (item.isCheckbox)
+        {
+            printf("\033[%d;%dH> %s%s%s <\n", (term_size.rows / 2) + offset,
+                   ((term_size.columns - labelLength) / 2) - 2, UNDERLINE, item.label, RESET);
+            return;
+        }
         if (inputLength)
         {
 
@@ -30,10 +36,59 @@ void printMenuItem(Input item, int32_t isSelected, int32_t offset)
     }
     else
     {
+        if (item.isCheckbox)
+        {
+            printf("\033[%d;%dH%s%s%s\n", (term_size.rows / 2) + offset,
+                   (term_size.columns - labelLength) / 2, UNDERLINE, item.label, RESET);
+            return;
+        }
 
         printf("\033[%d;%dH%s: %s\n", (term_size.rows / 2) + offset,
                (term_size.columns - labelLength) / 2, item.label, item.input);
     }
+}
+
+void printMenuCheckbox(char *string, int32_t isSelected, int32_t isCheckboxSelected, int32_t offset)
+{
+    int stringLength = strlen(string);
+    if (isSelected)
+    {
+        if (isCheckboxSelected)
+        {
+            printf("\033[%d;%dH> %s: [X] <\n", (term_size.rows / 2) + offset,
+                   ((term_size.columns - stringLength) / 2) - 2, string);
+        }
+        else
+        {
+            printf("\033[%d;%dH> %s: [ ] <\n", (term_size.rows / 2) + offset,
+                   ((term_size.columns - stringLength) / 2) - 2, string);
+        }
+    }
+    else
+    {
+        if (isCheckboxSelected)
+        {
+            printf("\033[%d;%dH%s: [X]\n", (term_size.rows / 2) + offset,
+                   (term_size.columns - stringLength) / 2, string);
+        }
+        else
+        {
+            printf("\033[%d;%dH%s: [ ]\n", (term_size.rows / 2) + offset,
+                   (term_size.columns - stringLength) / 2, string);
+        }
+    }
+
+    // int stringLength = strlen(string);
+    // if (isSelected)
+    // {
+    //     printf("\033[%d;%dH> %s: [X] <\n", (term_size.rows / 2) + offset,
+    //            ((term_size.columns - stringLength) / 2) - 2, string);
+    // }
+    // else
+    // {
+    //     printf("\033[%d;%dH%s: [ ]\n", (term_size.rows / 2) + offset,
+    //            (term_size.columns - stringLength) / 2, string);
+    // }
 }
 
 void menu_item(char *string, char *color1, char *color2)
@@ -64,10 +119,12 @@ void menu_introduzir_artigo(void)
 {
 
     Input inputItems[] = {
-        {"Nome", ""},
-        {"Preço", ""},
-        {"Quantidade", ""},
-        {"Categoria", ""}};
+        {.label = "Nome", .input = "", .isCheckbox = 0},
+        {.label = "Preco", .input = "", .isCheckbox = 0},
+        {.label = "Quantidade", .input = "", .isCheckbox = 0},
+        {.label = "Categoria", .input = "", .isCheckbox = 1, .checkBoxOptions = {"Ramos", "Arranjos", "Jarros", "CentrosMesa", "OutrasFlores"}},
+    };
+
     Artigo artigo;
     int32_t result = input_menu(&artigo, inputItems, LENGTH(inputItems));
     printf("result: %d\n", result);

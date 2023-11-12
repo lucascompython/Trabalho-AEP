@@ -4,10 +4,19 @@
 #include <stdint.h>
 #include "main.h"
 #include <stdlib.h>
+
+typedef struct
+{
+    char options[5][40];
+} Checkbox;
 typedef struct
 {
     char label[40];
     char input[40];
+    int isCheckbox;
+    char checkBoxOptions[5][40];
+    // Checkbox checkbox;
+
 } Input;
 
 void menu_item(char *string, char *color1, char *color2);
@@ -26,5 +35,6 @@ void disableRawMode(void);
 void menu_principal(void);
 int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize);
 void printMenuItem(Input item, int32_t isSelected, int32_t offset);
+void printMenuCheckbox(char *string, int32_t isSelected, int32_t isCheckboxSelected, int32_t offset);
 
 #endif // MENU_H

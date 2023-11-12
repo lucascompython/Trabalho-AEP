@@ -106,6 +106,7 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
 
     int selectedButton = 1;
     int selectedItem = 0;
+    int selectedCheckbox = 1; // -1 = Nenhum selecionado
 
     char c;
 
@@ -113,6 +114,52 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
     {
         for (int i = 0; i < inputItemsSize; i++)
         {
+
+            if (inputItems[i].isCheckbox)
+            {
+                if (i == selectedItem)
+                {
+                    printMenuItem(inputItems[i], 1, (i + 1) - (inputItemsSize / 2));
+                }
+                else
+                {
+
+                    printMenuItem(inputItems[i], 0, (i + 1) - (inputItemsSize / 2));
+                }
+
+                for (int j = 0; j < 5; j++)
+                {
+
+                    if (j == selectedCheckbox)
+                    {
+                        if (selectedItem > 3 && selectedItem == j + 4)
+                        {
+
+                            printMenuCheckbox(inputItems[i].checkBoxOptions[j], 1, 1, (i + 1) - (inputItemsSize / 2) + j + 1);
+                        }
+                        else
+                        {
+
+                            printMenuCheckbox(inputItems[i].checkBoxOptions[j], 0, 1, (i + 1) - (inputItemsSize / 2) + j + 1);
+                        }
+                    }
+                    else
+                    {
+                        if (selectedItem > 3 && selectedItem == j + 4)
+                        {
+
+                            printMenuCheckbox(inputItems[i].checkBoxOptions[j], 1, 0, (i + 1) - (inputItemsSize / 2) + j + 1);
+                        }
+                        else
+                        {
+
+                            printMenuCheckbox(inputItems[i].checkBoxOptions[j], 0, 0, (i + 1) - (inputItemsSize / 2) + j + 1);
+                        }
+                    }
+                }
+                continue;
+            }
+
             if (i == selectedItem)
             {
                 printMenuItem(inputItems[i], 1, i - (inputItemsSize / 2) + 1);
@@ -125,12 +172,12 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
 
         if (selectedButton == 1)
         {
-            printf("\033[%d;%dH\033[7m[OK]\033[0m   [Cancelar]\n", (term_size.rows / 2) + inputItemsSize,
+            printf("\033[%d;%dH\033[7m[OK]\033[0m   [Cancelar]\n", (term_size.rows / 2) + inputItemsSize + 5,
                    (term_size.columns - 17) / 2); // 17 é o tamanho da string "[OK]   [Cancel]"
         }
         else
         {
-            printf("\033[%d;%dH[OK]   \033[7m[Cancelar]\033[0m\n", (term_size.rows / 2) + inputItemsSize,
+            printf("\033[%d;%dH[OK]   \033[7m[Cancelar]\033[0m\n", (term_size.rows / 2) + inputItemsSize + 5,
                    (term_size.columns - 17) / 2); // 17 é o tamanho da string "[OK]   [Cancel]"
         }
 
@@ -144,11 +191,11 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
                 if (selectedItem > 0)
                     selectedItem--;
                 else
-                    selectedItem = inputItemsSize - 1; // Voltar ao fim
+                    selectedItem = inputItemsSize + 5 - 1; // Voltar ao fim
             }
             else if (c == 'B') // Down Arrow
             {
-                if (selectedItem < inputItemsSize - 1)
+                if (selectedItem < inputItemsSize + 5 - 1)
                     selectedItem++;
                 else
                     selectedItem = 0; // Voltar ao inicio
@@ -200,9 +247,17 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
                 }
             }
         }
+        else if (c == 32) // Barra de espaço
+        {
+            if (selectedItem > 3)
+            {
+                selectedCheckbox = selectedItem - 4;
+            }
+        }
+
         else
         { // Handle input characters
-            if (selectedItem >= 0 && selectedItem <= inputItemsSize - 1)
+            if (selectedItem >= 0 && selectedItem <= inputItemsSize - 1 && !inputItems[selectedItem].isCheckbox)
             {
                 if (inputItems[selectedItem].input[strlen(inputItems[selectedItem].input) - 1] == '*')
                 {
