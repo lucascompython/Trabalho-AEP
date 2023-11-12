@@ -162,16 +162,65 @@ void menu_introduzir_artigo(void)
 }
 void menu_listar(void)
 {
-    printf("Listar artigos\n");
-}
-
-void free_options(char **options, size_t size)
-{
-    for (size_t i = 0; i < size; i++)
+    // char **artigosOptions = (char **)malloc(sizeof(char *) * size_artigos);
+    // if (artigosOptions == NULL)
+    // {
+    //     fprintf(stderr, "Erro: malloc() retornou NULL\n");
+    //     exit(1);
+    // }
+    // for (size_t i = 0; i < size_artigos; i++)
+    // {
+    //     artigosOptions[i] = artigos[i].nome;
+    // }
+    if (size_artigos == 0)
     {
-        free(options[i]);
+        clear_menu();
+        menu_centered_item("Não há artigos para listar", UNDERLINE, "", 0);
+        menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
+        getchar();
+        menu_principal();
+        return;
     }
-    free(options);
+
+    int32_t result = arrow_menu_filter(artigos, size_artigos);
+    clear_menu();
+
+    // show the selected artigo
+    if (result != -1)
+    {
+        char preco[40];
+        char quantidade[40];
+        char nome[40];
+        char categoria[40];
+        char uuid[43];
+
+#ifdef _WIN32
+        sprintf_s(preco, 40, "Preço: %.2f", artigos[result].preco);
+        sprintf_s(nome, 40, "Nome: %s", artigos[result].nome);
+        sprintf_s(quantidade, 40, "Quantidade: %lld", artigos[result].quantidade);
+        sprintf_s(categoria, 40, "Categoria: %d", artigos[result].categoria);
+        sprintf_s(uuid, 40, "UUID: %s", artigos[result].uuid);
+#elif __unix__
+        sprintf(preco, "Preço: %.2f", artigos[result].preco);
+        sprintf(nome, "Nome: %s", artigos[result].nome);
+        sprintf(quantidade, "Quantidade: %ld", artigos[result].quantidade);
+        sprintf(categoria, "Categoria: %d", artigos[result].categoria);
+        sprintf(uuid, "UUID: %s", artigos[result].uuid);
+#endif
+        // TODO: Centrar isto melhor verticalmente
+        menu_centered_item(nome, UNDERLINE, "", 0);
+        menu_centered_item(preco, "", "", 1);
+        menu_centered_item(quantidade, "", "", 2);
+        menu_centered_item(categoria, "", "", 3);
+        menu_centered_item(uuid, "", "", 4);
+        menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 5);
+        getchar();
+        menu_principal();
+    }
+    else
+    {
+        menu_centered_item("Não há artigos para listar", UNDERLINE, "", 0);
+    }
 }
 
 void menu_modificar(void)
@@ -240,7 +289,7 @@ void menu_modificar(void)
         artigos[selectedArtigo].quantidade = atoi(inputItems[2].input);
         artigos[selectedArtigo].categoria = atoi(inputItems[3].input);
 
-        free_options(artigosOptions, size_artigos);
+        free(artigosOptions);
         clear_menu();
         menu_centered_item("Artigo modificado com sucesso", UNDERLINE, "", 0);
         menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
@@ -248,11 +297,11 @@ void menu_modificar(void)
         menu_principal();
         break;
     case 1:
-        free_options(artigosOptions, size_artigos);
+        free(artigosOptions);
         menu_principal();
         break;
     default:
-        free_options(artigosOptions, size_artigos);
+        free(artigosOptions);
         fprintf(stderr, "Erro: input_menu() retornou %d\n", result);
         exit(1);
     }

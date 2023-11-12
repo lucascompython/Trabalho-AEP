@@ -36,5 +36,6 @@ void menu_principal(void);
 int32_t input_menu(Input inputItems[], int32_t inputItemsSize);
 void printMenuItem(Input item, int32_t isSelected, int32_t offset);
 void printMenuCheckbox(char *string, int32_t isSelected, int32_t isCheckboxSelected, int32_t offset);
+int32_t arrow_menu_filter(Artigo *artigos, int32_t size);
 
 #endif // MENU_H

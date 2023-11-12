@@ -9,6 +9,7 @@
 #include "term_size.h"
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "json.h"
 
 #define ESC 27
@@ -272,6 +273,156 @@ int32_t input_menu(Input inputItems[], int32_t inputItemsSize)
         clear_menu();
     }
 
+    return 0;
+}
+
+// Function that is a arrow menu but when you press 'f' the user can start typing and the menu will filter the options by Artigo.categoria
+int32_t arrow_menu_filter(Artigo *artigos, int32_t size)
+{
+    // TODO: Resolver bug de ter que clicar varias vezes se items filtrados tiverem separados
+    clear_menu();
+    enableRawMode();
+
+    int32_t selectedOption = 0;
+    int32_t totalOptions = size;
+    int32_t isFiltering = 0;
+    char filter[20];
+    char c;
+    int changed = 0;
+
+    while (1)
+    {
+        // Print menu options
+        if (isFiltering)
+        {
+            char filterString[40];
+            sprintf(filterString, "(F)iltrar por: %s", filter);
+            menu_centered_item(filterString, UNDERLINE, "", -2);
+        }
+        else
+        {
+
+            menu_centered_item("(F)iltrar", UNDERLINE, "", -2);
+        }
+
+        for (int32_t i = 0; i < totalOptions; i++)
+        {
+            if (i == selectedOption)
+            {
+                if (!isFiltering || strstr(categoria_to_str(artigos[i].categoria), filter) != NULL)
+                {
+                    printf("\033[7m"); // Invert text color (selected option)
+                    menu_centered_item(artigos[i].nome, "", "", i - (totalOptions / 2) + 1);
+                    printf("%s\n", RESET); // Reset text color
+                }
+            }
+            else
+            {
+                if (!isFiltering || strstr(categoria_to_str(artigos[i].categoria), filter) != NULL)
+                {
+                    menu_centered_item(artigos[i].nome, "", "", i - (totalOptions / 2) + 1);
+                    puts("");
+                }
+            }
+        }
+
+        if (isFiltering && !changed)
+        {
+            int firstMatch = -1;
+            for (int i = 0; i < totalOptions; i++)
+            {
+                if (strstr(categoria_to_str(artigos[i].categoria), filter) != NULL)
+                {
+                    firstMatch = i;
+                    break;
+                }
+            }
+
+            if (firstMatch != -1)
+            {
+                selectedOption = firstMatch;
+            }
+        }
+
+        // Handle arrow key input
+        c = getchar();
+        if (c == ESC)
+        {
+            c = getchar(); // Read the [
+            c = getchar(); // Read the A, B, C, or D
+            if (c == 'A')
+            {
+                system("notify-send 'A'");
+                if (selectedOption > 0)
+                {
+                    selectedOption--; // Up arrow key
+                    changed = 1;
+                }
+                else
+                {
+
+                    changed = 1;
+                    selectedOption = totalOptions - 1; // Voltar ao fim
+                }
+            }
+            else if (c == 'B')
+            {
+                if (selectedOption < totalOptions - 1)
+                {
+
+                    system("notify-send 'B'");
+                    changed = 1;
+                    selectedOption++; // Down arrow key
+                }
+                else
+                {
+
+                    changed = 1;
+                    selectedOption = 0; // Voltar ao inicio
+                }
+            }
+        }
+        else if (c == '\n')
+        {
+            disableRawMode();
+            return selectedOption;
+        }
+        else if (c == 127)
+        { // Backspace
+            if (isFiltering)
+            {
+                if (strlen(filter) > 0)
+                {
+                    filter[strlen(filter) - 1] = '\0';
+                }
+            }
+        }
+        else if (c == '\t') // Sair do modo de filtrar quando clicar no Tab
+        {
+            isFiltering = 0;
+            changed = 0;
+        }
+        else
+        { // Handle input characters
+            if (isFiltering)
+            {
+                if (strlen(filter) < 20 - 1)
+                {
+                    filter[strlen(filter)] = c;
+                    filter[strlen(filter) + 1] = '\0';
+                }
+            }
+        }
+
+        if (c == 'f' || c == 'F')
+        {
+            isFiltering = 1;
+            copy_str(filter, "\0", 1);
+        }
+
+        clear_menu();
+        cursor_upLeft();
+    }
     return 0;
 }
 
