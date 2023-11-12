@@ -7,6 +7,7 @@
 #include "colors.h"
 #include "term_size.h"
 #include <string.h>
+#include "json.h"
 
 #define ARROW_UP 72
 #define ARROW_DOWN 80
@@ -73,14 +74,13 @@ int arrow_menu(char *strings[], int size)
     }
 }
 
-int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
+int32_t input_menu(Input inputItems[], int32_t inputItemsSize)
 {
     clear_menu();
-    UNUSED(artigo);
 
     const unsigned int maxInputSize = 40;
 
-    int selectedButton = 1;
+    int selectedButton = 0;
     int selectedItem = 0;
     int selectedCheckbox = -1; // -1 = Nenhum selecionado
 
@@ -146,7 +146,7 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
             }
         }
 
-        if (selectedButton == 1)
+        if (selectedButton == 0)
         {
             printf("\033[%d;%dH\033[7m[OK]\033[0m   [Cancelar]\n", (term_size.rows / 2) + inputItemsSize + 2,
                    (term_size.columns - 17) / 2); // 17 é o tamanho da string "[OK]   [Cancel]"
@@ -174,17 +174,17 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
         }
         else if (c == ARROW_LEFT) // Left Arrow
         {
-            if (selectedButton == 2)
-                selectedButton = 1;
+            if (selectedButton == 1)
+                selectedButton = 0;
             else
-                selectedButton = 2;
+                selectedButton = 1;
         }
         else if (c == ARROW_RIGHT) // Right Arrow
         {
-            if (selectedButton == 1)
-                selectedButton = 2;
-            else
+            if (selectedButton == 0)
                 selectedButton = 1;
+            else
+                selectedButton = 0;
         }
         else if (c == ENTER)
         { // Enter Key
@@ -215,6 +215,7 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
             if (selectedItem > 3) // Se tiver numa checkbox
             {
                 selectedCheckbox = selectedItem - 4;
+                sprintf_s(inputItems[3].input, sizeof(inputItems[3].input), "%d", selectedCheckbox);
             }
         }
 
