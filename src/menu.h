@@ -7,10 +7,6 @@
 
 typedef struct
 {
-    char options[5][40];
-} Checkbox;
-typedef struct
-{
     char label[40];
     char input[40];
     int isCheckbox;
