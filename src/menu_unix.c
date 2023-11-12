@@ -125,13 +125,13 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
 
         if (selectedButton == 1)
         {
-            printf("\033[%d;%dH\033[7m[OK]\033[0m   [Cancel]\n", (term_size.rows / 2) + inputItemsSize + 1,
-                   (term_size.columns - 15) / 2); // 15 é o tamanho da string "[OK]   [Cancel]"
+            printf("\033[%d;%dH\033[7m[OK]\033[0m   [Cancelar]\n", (term_size.rows / 2) + inputItemsSize + 1,
+                   (term_size.columns - 17) / 2); // 17 é o tamanho da string "[OK]   [Cancel]"
         }
         else
         {
-            printf("\033[%d;%dH[OK]   \033[7m[Cancel]\033[0m\n", (term_size.rows / 2) + inputItemsSize + 1,
-                   (term_size.columns - 15) / 2); // 15 é o tamanho da string "[OK]   [Cancel]"
+            printf("\033[%d;%dH[OK]   \033[7m[Cancelar]\033[0m\n", (term_size.rows / 2) + inputItemsSize + 1,
+                   (term_size.columns - 17) / 2); // 17 é o tamanho da string "[OK]   [Cancel]"
         }
 
         c = getchar();
