@@ -199,7 +199,7 @@ void menu_listar(void)
         sprintf_s(nome, 40, "Nome: %s", artigos[result].nome);
         sprintf_s(quantidade, 40, "Quantidade: %lld", artigos[result].quantidade);
         sprintf_s(categoria, 40, "Categoria: %d", artigos[result].categoria);
-        sprintf_s(uuid, 40, "UUID: %s", artigos[result].uuid);
+        sprintf_s(uuid, 43, "UUID: %s", artigos[result].uuid);
 #elif __unix__
         sprintf(preco, "Preço: %.2f", artigos[result].preco);
         sprintf(nome, "Nome: %s", artigos[result].nome);
