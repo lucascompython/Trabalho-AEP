@@ -107,7 +107,7 @@ int32_t input_menu(Input inputItems[], int32_t inputItemsSize, int32_t isVenda)
         if (isVenda)
         {
             char vendaString[40];
-            sprintf_s(vendaString, 40, "Total: %.2f€", aotf(inputItems[1].input) * atof(inputItems[2].input));
+            sprintf_s(vendaString, 40, "Total: %.2f€", strtof(inputItems[1].input, NULL) * strtof(inputItems[2].input, NULL));
             menu_centered_item(vendaString, UNDERLINE, "", -5);
         }
 
