@@ -149,7 +149,7 @@ void menu_introduzir_artigo(void)
         copy_str(artigos[size_artigos - 1].uuid, uuid_gen(), 37);
 
         clear_menu();
-        menu_centered_item("Artigo introduzido com sucesso", UNDERLINE, "", 0);
+        menu_centered_item("Artigo introduzido com sucesso!", GREEN, UNDERLINE, 0);
         menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
 
 #ifdef __unix__ // ler "qualquer" teclas no linux
@@ -309,7 +309,7 @@ void menu_modificar(void)
 
         free(artigosOptions);
         clear_menu();
-        menu_centered_item("Artigo modificado com sucesso", UNDERLINE, "", 0);
+        menu_centered_item("Artigo modificado com sucesso!", GREEN, UNDERLINE, 0);
         menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
 #ifdef __unix__ // ler "qualquer" teclas no linux
         enableRawMode();
@@ -329,10 +329,24 @@ void menu_modificar(void)
         exit(1);
     }
 }
+
+int32_t get_category_count(Artigo *artigos, int32_t size)
+{
+    int32_t categoryCount = 0;
+    for (int32_t i = 0; i < size; i++)
+    {
+        if ((int32_t)artigos[i].categoria > categoryCount)
+        {
+            categoryCount = artigos[i].categoria;
+        }
+    }
+    return categoryCount + 1;
+}
+
 void menu_estatisticas(void)
 {
     char *options[] = {
-        "Stock", // Alto e baixo preços | Quantidade maior e menor
+        "Stock por Categoria", // Alto e baixo preços | Quantidade maior e menor
         "Vendas",
         "Quebras", // Lixo | menu btop filtrar por categoria e total
         "Voltar"};
@@ -358,6 +372,75 @@ void menu_estatisticas(void)
             menu_principal();
             return;
         }
+        cursor_upLeft();
+        clear_menu();
+
+        int32_t categoriaCount = get_category_count(artigos, size_artigos);
+
+        int32_t *categoryCounts = (int32_t *)malloc(sizeof(int32_t) * categoriaCount);
+        double *categoryTotalPrices = (double *)malloc(sizeof(double) * categoriaCount);
+        if (categoryCounts == NULL || categoryTotalPrices == NULL)
+        {
+            fprintf(stderr, "Erro: malloc() retornou NULL\n");
+            exit(1);
+        }
+
+        for (int32_t i = 0; i < categoriaCount; i++)
+        {
+            categoryCounts[i] = 0;
+            categoryTotalPrices[i] = 0.0;
+        }
+        double precoTotal = 0.0;
+
+        for (size_t i = 0; i < size_artigos; i++)
+        {
+            categoryCounts[artigos[i].categoria] += artigos[i].quantidade;
+            for (uint64_t j = 0; j < artigos[i].quantidade; j++)
+            {
+                precoTotal += artigos[i].preco;
+                categoryTotalPrices[artigos[i].categoria] += artigos[i].preco;
+            }
+        }
+
+        char header[60];
+        sprintf(header, "%-20s | %10s | %7s\n", "Categoria", "Quantidade", "Preço");
+        menu_centered_item(header, "", "", 0);
+
+        char linhas[60] = "----------------------|------------|---------\n";
+        menu_centered_item(linhas, "", "", 1);
+        for (int32_t i = 0; i < categoriaCount; i++)
+        {
+            char *categoriaStr = categoria_to_str(i);
+            char quantidade[40];
+            sprintf(quantidade, "%10d", categoryCounts[i]);
+            char precoCategoriaStr[40];
+            sprintf(precoCategoriaStr, "%7.2f€", categoryTotalPrices[i]);
+            char linha[120];
+            sprintf(linha, "%-21s | %s | %s", categoriaStr, quantidade, precoCategoriaStr);
+            menu_centered_item(linha, "", "", i + 2);
+        }
+
+        menu_centered_item(linhas, "", "", categoriaCount + 2);
+        // Print total price
+        char precoTotalStr[40];
+        sprintf(precoTotalStr, "Preço Total: %.2f\n", precoTotal);
+        menu_centered_item(precoTotalStr, BOLD, UNDERLINE, categoriaCount + 3);
+
+        menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", categoriaCount + 5);
+#ifdef __unix__ // temos que fazer isto para ler "qualquer" teclas no linux
+        enableRawMode();
+        getchar();
+        disableRawMode();
+#elif _WIN32
+        _getch(); // ler qualquer tecla no windows
+#endif
+        menu_principal();
+
+        free(categoryCounts);
+        free(categoryTotalPrices);
+
+        // make a table with the quantity of each category plus the total
+
         break;
     case 1:
         printf("Vendas\n");
