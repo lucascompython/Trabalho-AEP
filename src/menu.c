@@ -564,6 +564,21 @@ void menu_estatisticas(void)
 #endif
         menu_centered_item(perdaEstimadaStr, BOLD, UNDERLINE, categoriaCount + 3);
 
+        menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", categoriaCount + 5);
+#ifdef __unix__ // temos que fazer isto para ler "qualquer" teclas no linux
+        enableRawMode();
+        getchar();
+        disableRawMode();
+#elif _WIN32
+        _getch(); // ler qualquer tecla no windows
+#endif
+        menu_principal();
+
+        free(categoryCounts);
+        free(categoryTotalPrices);
+
+        // make a table with the quantity of each category plus the total
+
         free(trashedCounts);
         break;
     }
