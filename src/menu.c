@@ -316,7 +316,7 @@ void menu_modificar(void)
         enableRawMode();
         getchar();
 #elif _WIN32
-        _getch(); // ler qualquer tecla no windows
+        _getch();     // ler qualquer tecla no windows
 #endif
         menu_principal();
         break;
@@ -518,12 +518,20 @@ void menu_estatisticas(void)
 
         // Print the header of the table
         char header[60];
+#ifdef __unix__
         sprintf(header, "%-20s | %10s | %7s\n", "Categoria", "Quantidade", "Desperdício");
+#elif _WIN32
+        sprintf_s(header, 60, "%-20s | %10s | %7s\n", "Categoria", "Quantidade", "Desperdício");
+#endif
         menu_centered_item(header, "", "", 0);
 
         // Print the line separator
         char linhas[60];
+#ifdef __unix__
         sprintf(linhas, "--------------------|------------|------------\n");
+#elif _WIN32
+        sprintf_s(linhas, 60, "--------------------|------------|------------\n");
+#endif
         menu_centered_item(linhas, "", "", 1);
 
         // Print each category with its count and total price
@@ -531,11 +539,17 @@ void menu_estatisticas(void)
         {
             char *categoriaStr = categoria_to_str(i);
             char quantidade[40];
-            sprintf(quantidade, "%10d", categoryCounts[i]);
             char desperdicio[40];
-            sprintf(desperdicio, "%10d", trashedCounts[i]);
             char linha[120];
+#ifdef __unix__
+            sprintf(quantidade, "%10d", categoryCounts[i]);
+            sprintf(desperdicio, "%10d", trashedCounts[i]);
             sprintf(linha, "%-18s | %s | %s", categoriaStr, quantidade, desperdicio);
+#elif _WIN32
+            sprintf_s(quantidade, 40, "%10d", categoryCounts[i]);
+            sprintf_s(desperdicio, 40, "%10d", trashedCounts[i]);
+            sprintf_s(linha, 120, "%-18s | %s | %s", categoriaStr, quantidade, desperdicio);
+#endif
             menu_centered_item(linha, "", "", i + 2);
         }
 
@@ -543,7 +557,11 @@ void menu_estatisticas(void)
 
         // Print total estimated loss
         char perdaEstimadaStr[40];
+#ifdef __unix__
         sprintf(perdaEstimadaStr, "Perda Estimada: %.2f€\n", trashTotal);
+#elif _WIN32
+        sprintf_s(perdaEstimadaStr, 40, "Perda Estimada: %.2f€\n", trashTotal);
+#endif
         menu_centered_item(perdaEstimadaStr, BOLD, UNDERLINE, categoriaCount + 3);
 
         free(trashedCounts);
