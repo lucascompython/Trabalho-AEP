@@ -225,7 +225,7 @@ void menu_listar(void)
         sprintf(preco, "Preço: %.2f", artigos[result].preco);
         sprintf(nome, "Nome: %s", artigos[result].nome);
         sprintf(quantidade, "Quantidade: %ld", artigos[result].quantidade);
-        sprintf(categoria, "Categoria: %d", artigos[result].categoria);
+        sprintf(categoria, "Categoria: %s", categoria_to_str(artigos[result].categoria));
         sprintf(uuid, "UUID: %s", artigos[result].uuid);
 #endif
         // TODO: Centrar isto melhor verticalmente

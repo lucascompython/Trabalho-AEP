@@ -4,11 +4,5 @@
         "preco": 6.99,
         "quantidade": 10,
         "categoria": "Ramos"
-    },
-    "Ramos de Rosas": {
-        "uuid": "013c7461-bda8-09fe-c3c1-9a9b9fa52fd6",
-        "preco": 12.99,
-        "quantidade": 2,
-        "categoria": "Ramos"
     }
 }
