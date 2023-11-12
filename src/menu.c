@@ -144,6 +144,11 @@ void menu_introduzir_artigo(void)
         artigos[size_artigos - 1].categoria = atoi(inputItems[3].input);
         copy_str(artigos[size_artigos - 1].uuid, uuid_gen(), 37);
 
+        clear_menu();
+        menu_centered_item("Artigo introduzido com sucesso", UNDERLINE, "", 0);
+        menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
+        getchar();
+
         menu_principal();
 
         break;
@@ -161,7 +166,68 @@ void menu_listar(void)
 }
 void menu_modificar(void)
 {
-    printf("Modificar artigos\n");
+    if (size_artigos == 0)
+    {
+        clear_menu();
+        menu_centered_item("Não há artigos para modificar", UNDERLINE, "", 0);
+        menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
+        getchar();
+        menu_principal();
+        return;
+    }
+
+    // use arrow_menu to select an already existing artigo
+    char *artigosOptions[size_artigos];
+    for (size_t i = 0; i < size_artigos; i++)
+    {
+        artigosOptions[i] = artigos[i].nome;
+    }
+    int32_t selectedArtigo = arrow_menu(artigosOptions, size_artigos);
+
+    char preco[40];
+    sprintf(preco, "%f", artigos[selectedArtigo].preco);
+    char quantidade[40];
+    sprintf(quantidade, "%ld", artigos[selectedArtigo].quantidade);
+    char nome[40];
+    sprintf(nome, "%s", artigos[selectedArtigo].nome);
+    char categoria[40];
+    sprintf(categoria, "%d", artigos[selectedArtigo].categoria);
+
+    Input inputItems[] = {
+        {.label = "Nome", .isCheckbox = 0},
+        {.label = "Preco", .isCheckbox = 0},
+        {.label = "Quantidade", .isCheckbox = 0},
+        {.label = "Categoria", .isCheckbox = 1, .checkBoxOptions = {"Ramos", "Arranjos", "Jarros", "CentrosMesa", "OutrasFlores"}},
+    };
+
+    // Copy the content from your character arrays to the input field
+    strcpy(inputItems[0].input, nome);
+    strcpy(inputItems[1].input, preco);
+    strcpy(inputItems[2].input, quantidade);
+    strcpy(inputItems[3].input, categoria);
+
+    int32_t result = input_menu(inputItems, LENGTH(inputItems));
+    switch (result)
+    {
+    case 0:
+        copy_str(artigos[selectedArtigo].nome, inputItems[0].input, strlen(inputItems[0].input) + 1);
+        artigos[selectedArtigo].preco = atof(inputItems[1].input);
+        artigos[selectedArtigo].quantidade = atoi(inputItems[2].input);
+        artigos[selectedArtigo].categoria = atoi(inputItems[3].input);
+
+        clear_menu();
+        menu_centered_item("Artigo modificado com sucesso", UNDERLINE, "", 0);
+        menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
+        getchar();
+        menu_principal();
+        break;
+    case 1:
+        menu_principal();
+        break;
+    default:
+        fprintf(stderr, "Erro: input_menu() retornou %d\n", result);
+        exit(1);
+    }
 }
 void menu_estatisticas(void)
 {

@@ -106,7 +106,9 @@ int32_t input_menu(Input inputItems[], int32_t inputItemsSize)
 
     int selectedButton = 0;
     int selectedItem = 0;
-    int selectedCheckbox = -1; // -1 = Nenhum selecionado
+
+    int converted = atoi(inputItems[3].input);         // Converter o input para int | Input de checkbox indica a sua posição
+    int selectedCheckbox = converted ? converted : -1; // -1 = Nenhum selecionado
 
     char c;
 
@@ -134,7 +136,6 @@ int32_t input_menu(Input inputItems[], int32_t inputItemsSize)
                     {
                         if (selectedItem > 3 && selectedItem == j + 4)
                         {
-
                             printMenuCheckbox(inputItems[i].checkBoxOptions[j], 1, 1, i - (inputItemsSize / 2) + j);
                         }
                         else
