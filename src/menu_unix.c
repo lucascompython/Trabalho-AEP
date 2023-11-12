@@ -241,13 +241,7 @@ int32_t input_menu(Input inputItems[], int32_t inputItemsSize, int32_t isVenda)
         }
         else if (c == 127)
         { // Backspace
-            // if (selectedButton == 1)
-            // {
-            //     if (strlen(inputItems[selectedItem].input) > 0)
-            //     {
-            //         inputItems[selectedItem].input[strlen(inputItems[selectedItem].input) - 1] = '\0';
-            //     }
-            // }
+
             if (selectedItem >= 0 && selectedItem <= inputItemsSize - 1)
             {
                 // Remove the last character from the input
