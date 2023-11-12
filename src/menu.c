@@ -328,7 +328,7 @@ void menu_modificar(void)
         enableRawMode();
         getchar();
 #elif _WIN32
-        _getch();     // ler qualquer tecla no windows
+        _getch(); // ler qualquer tecla no windows
 #endif
         menu_principal();
         break;
@@ -459,7 +459,7 @@ void menu_estatisticas(void)
         getchar();
         disableRawMode();
 #elif _WIN32
-        _getch();     // ler qualquer tecla no windows
+        _getch(); // ler qualquer tecla no windows
 #endif
         menu_principal();
 
@@ -503,13 +503,13 @@ void menu_estatisticas(void)
 
         char precoTotalStr[60];
 #ifdef __unix__
-        sprintf(precoTotalStr, "Média dos preços dos artigos vendidos: %.2f€\n", precoMedio);
+        sprintf(precoTotalStr, "     Média dos preços dos artigos vendidos: %.2f€\n", precoMedio);
 
 #elif _WIN32
-        sprintf_s(precoTotalStr, 60, "Média dos preços das vendas: %.2f€\n", precoMedio);
+        sprintf_s(precoTotalStr, 60, "     Média dos preços das vendas: %.2f€\n", precoMedio);
 #endif
 
-        menu_centered_item(precoTotalStr, BOLD, UNDERLINE, 0);
+        menu_centered_item(precoTotalStr, BOLD, "", 0);
 
         menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
 
