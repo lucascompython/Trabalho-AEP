@@ -14,9 +14,11 @@
 #include <conio.h> // Para a welcome screen _getch() ler todas as teclas
 #endif
 
-extern TerminalSize term_size; // from src/main.c
-extern Artigo *artigos;        // from src/main.c
-extern size_t size_artigos;    // from src/main.c
+extern TerminalSize term_size;       // from src/main.c
+extern Artigo *artigos;              // from src/main.c
+extern size_t size_artigos;          // from src/main.c
+extern Artigo *artigos_vendidos;     // from src/main.c
+extern size_t size_artigos_vendidos; // from src/main.c
 
 void printMenuItem(Input item, int32_t isSelected, int32_t offset)
 {
@@ -134,14 +136,24 @@ void menu_introduzir_artigo(void)
         {.label = "Categoria", .input = "", .isCheckbox = 1, .checkBoxOptions = {"Ramos", "Arranjos", "Jarros", "CentrosMesa", "OutrasFlores"}},
     };
 
-    int32_t result = input_menu(inputItems, LENGTH(inputItems));
+    int32_t result = input_menu(inputItems, LENGTH(inputItems), 0);
     switch (result)
     {
     case 0:
         size_artigos++;
         artigos = realloc(artigos, sizeof(Artigo) * (size_artigos));
+        if (artigos == NULL)
+        {
+            fprintf(stderr, "Erro: realloc() retornou NULL\n");
+            exit(1);
+        }
 
         artigos[size_artigos - 1].nome = (char *)malloc(sizeof(char) * (strlen(inputItems[0].input) + 1));
+        if (artigos[size_artigos - 1].nome == NULL)
+        {
+            fprintf(stderr, "Erro: malloc() retornou NULL\n");
+            exit(1);
+        }
         copy_str(artigos[size_artigos - 1].nome, inputItems[0].input, strlen(inputItems[0].input) + 1);
 
         artigos[size_artigos - 1].preco = atof(inputItems[1].input);
@@ -299,7 +311,7 @@ void menu_modificar(void)
     copy_str(inputItems[2].input, quantidade, strlen(quantidade) + 1);
     copy_str(inputItems[3].input, categoria, strlen(categoria) + 1);
 
-    int32_t result = input_menu(inputItems, LENGTH(inputItems));
+    int32_t result = input_menu(inputItems, LENGTH(inputItems), 0);
     switch (result)
     {
     case 0:
@@ -458,7 +470,7 @@ void menu_estatisticas(void)
 
         break;
     case 1:
-        printf("Vendas\n");
+
         break;
     case 2:
     {
@@ -593,8 +605,121 @@ void menu_estatisticas(void)
     }
 }
 void menu_simular_vendas(void)
-{
-    printf("Simular vendas\n"); // menu nmtui | nome, codigo, preço, (quantidade) | guardar fatura num ficheiro txt
+{ // Simular vendas
+  // O utlizador pode escolher um artigo e a quantidade
+  // O programa vai subtrair a quantidade escolhida ao stock
+  // O programa vai guardar a fatura num ficheiro txt
+  // O programa vai mostrar a fatura
+  // O programa vai escrever a venda num ficheiro json (vendas.json)
+
+    if (size_artigos == 0)
+    {
+        clear_menu();
+        menu_centered_item("Não há artigos para listar", UNDERLINE, "", 0);
+        menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
+
+#ifdef __unix__ // temos que fazer isto para ler "qualquer" teclas no linux
+        enableRawMode();
+        getchar();
+        disableRawMode();
+#elif _WIN32
+        _getch(); // ler qualquer tecla no windows
+#endif
+        menu_principal();
+        return;
+    }
+
+    // use arrow_menu to select an already existing artigo
+    // char *artigosOptions[size_artigos];
+    char **artigosOptions = (char **)malloc(sizeof(char *) * size_artigos);
+    if (artigosOptions == NULL)
+    {
+        fprintf(stderr, "Erro: malloc() retornou NULL\n");
+        exit(1);
+    }
+    for (size_t i = 0; i < size_artigos; i++)
+    {
+        artigosOptions[i] = artigos[i].nome;
+    }
+    int32_t selectedArtigo = arrow_menu(artigosOptions, size_artigos);
+
+    char preco[40];
+    char quantidade[40];
+    char nome[40];
+    char categoria[40];
+#ifdef _WIN32
+    sprintf_s(preco, 40, "%.2f", artigos[selectedArtigo].preco);
+    sprintf_s(nome, 40, "%s", artigos[selectedArtigo].nome);
+    sprintf_s(quantidade, 40, "%lld", artigos[selectedArtigo].quantidade);
+    sprintf_s(categoria, 40, "%d", artigos[selectedArtigo].categoria);
+
+#elif __unix__
+    sprintf(preco, "%.2f", artigos[selectedArtigo].preco);
+    sprintf(nome, "%s", artigos[selectedArtigo].nome);
+    sprintf(quantidade, "%ld", artigos[selectedArtigo].quantidade);
+    sprintf(categoria, "%d", artigos[selectedArtigo].categoria);
+#endif
+
+    Input inputItems[] = {
+        {.label = "Nome", .isCheckbox = 0},
+        {.label = "Preço (€)", .isCheckbox = 0},
+        {.label = "Quantidade", .isCheckbox = 0},
+        {.label = "Categoria", .isCheckbox = 1, .checkBoxOptions = {"Ramos", "Arranjos", "Jarros", "CentrosMesa", "OutrasFlores"}},
+    };
+
+    // Copy the content from your character arrays to the input field
+
+    copy_str(inputItems[0].input, nome, strlen(nome) + 1);
+    copy_str(inputItems[1].input, preco, strlen(preco) + 1);
+    copy_str(inputItems[2].input, quantidade, strlen(quantidade) + 1);
+    copy_str(inputItems[3].input, categoria, strlen(categoria) + 1);
+
+    int32_t result = input_menu(inputItems, LENGTH(inputItems), 1);
+    switch (result)
+    {
+    case 0:
+        // copy_str(artigos[selectedArtigo].nome, inputItems[0].input, strlen(inputItems[0].input) + 1);
+        // artigos[selectedArtigo].preco = atof(inputItems[1].input);
+        // artigos[selectedArtigo].quantidade = atoi(inputItems[2].input);
+        // artigos[selectedArtigo].categoria = atoi(inputItems[3].input);
+
+        // free(artigosOptions);
+        // clear_menu();
+        // menu_centered_item("Artigo modificado com sucesso!", GREEN, UNDERLINE, 0);
+        // menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
+
+        // realloc artigos_vendidos
+        size_artigos_vendidos++;
+        artigos_vendidos = realloc(artigos_vendidos, sizeof(Artigo) * (size_artigos_vendidos));
+        if (artigos_vendidos == NULL)
+        {
+            fprintf(stderr, "Erro: realloc() retornou NULL\n");
+            exit(1);
+        }
+
+        // copy the selected artigo to artigos_vendidos
+        artigos_vendidos[size_artigos_vendidos - 1].nome = (char *)malloc(sizeof(char) * (strlen(artigos[selectedArtigo].nome) + 1));
+        if (artigos_vendidos[size_artigos_vendidos - 1].nome == NULL)
+        {
+            fprintf(stderr, "Erro: malloc() retornou NULL\n");
+            exit(1);
+        }
+
+        copy_str(artigos_vendidos[size_artigos_vendidos - 1].nome, artigos[selectedArtigo].nome, strlen(artigos[selectedArtigo].nome) + 1);
+        artigos_vendidos[size_artigos_vendidos - 1].preco = artigos[selectedArtigo].preco;
+        artigos_vendidos[size_artigos_vendidos - 1].quantidade = atoi(inputItems[2].input);
+        artigos_vendidos[size_artigos_vendidos - 1].categoria = artigos[selectedArtigo].categoria;
+        copy_str(artigos_vendidos[size_artigos_vendidos - 1].uuid, uuid_gen(), 37);
+
+        // subtract the quantity from the selected artigo
+        artigos[selectedArtigo].quantidade -= atoi(inputItems[2].input);
+
+        // save the artigos array to the json file
+        save_artigos_array(artigos, size_artigos, STOCK_JSON_FILE);
+
+        // save the artigos_vendidos array to the json file
+        save_artigos_array(artigos_vendidos, size_artigos_vendidos, VENDAS_JSON_FILE);
+    }
 }
 
 void menu_principal(void)

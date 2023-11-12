@@ -33,6 +33,8 @@ void restoreCursor() { show_cursor(); }
 TerminalSize term_size;
 Artigo *artigos;
 size_t size_artigos;
+Artigo *artigos_vendidos;
+size_t size_artigos_vendidos;
 
 void welcome_screen(void)
 {
@@ -75,7 +77,9 @@ int main(void)
         return 1;
     }
 
-    artigos = get_artigos_array(&size_artigos);
+    artigos = get_artigos_array(&size_artigos, STOCK_JSON_FILE);
+    artigos_vendidos = get_artigos_array(&size_artigos_vendidos,
+                                         VENDAS_JSON_FILE);
 
     welcome_screen();
     show_cursor(); // Restaurar o cursor ao sair. Não é 'restoreCursor' porque o Windows queixa-se que os paremetros não são os mesmos
@@ -101,7 +105,10 @@ int main(void)
         puts("----------------------");
     }
 
-    save_artigos_array(artigos, size_artigos);
+    save_artigos_array(artigos, size_artigos, STOCK_JSON_FILE);
+    save_artigos_array(artigos_vendidos, size_artigos_vendidos,
+                       VENDAS_JSON_FILE);
     clean_artigos_array(artigos, size_artigos);
+    clean_artigos_array(artigos_vendidos, size_artigos_vendidos);
     return 0;
 }

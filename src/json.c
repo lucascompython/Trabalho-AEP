@@ -2,9 +2,6 @@
 #include "yyjson.h" // external/yyjson/src
 #include "main.h"
 
-#define STOCK_JSON_FILE "stock.json"
-#define VENDAS_JSON_FILE "vendas.json"
-
 CategoriaArtigo str_to_categoria(const char *str)
 {
     if (strcmp(str, "Ramos") == 0)
@@ -72,9 +69,9 @@ void copy_str(char *dest, const char *src, size_t size)
 #endif
 }
 
-Artigo *get_artigos_array(size_t *size_artigos)
+Artigo *get_artigos_array(size_t *size_artigos, const char *json_file)
 {
-    yyjson_doc *doc = yyjson_read_file(STOCK_JSON_FILE, 0, NULL, NULL);
+    yyjson_doc *doc = yyjson_read_file(json_file, 0, NULL, NULL);
     if (!doc)
     {
         fprintf(stderr, "Erro ao ler o ficheiro JSON\n");
@@ -123,7 +120,7 @@ Artigo *get_artigos_array(size_t *size_artigos)
     return artigos;
 }
 
-void save_artigos_array(Artigo *artigos, size_t size)
+void save_artigos_array(Artigo *artigos, size_t size, const char *json_file)
 {
     yyjson_mut_doc *doc = yyjson_mut_doc_new(NULL);
     yyjson_mut_val *root = yyjson_mut_obj(doc);
@@ -148,6 +145,6 @@ void save_artigos_array(Artigo *artigos, size_t size)
 
     yyjson_mut_doc_set_root(doc, root);
 
-    yyjson_mut_write_file(STOCK_JSON_FILE, doc, YYJSON_WRITE_PRETTY, NULL, NULL);
+    yyjson_mut_write_file(json_file, doc, YYJSON_WRITE_PRETTY, NULL, NULL);
     yyjson_mut_doc_free(doc);
 }

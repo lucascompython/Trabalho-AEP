@@ -98,7 +98,7 @@ int32_t arrow_menu(char *strings[], int32_t size)
     }
 }
 
-int32_t input_menu(Input inputItems[], int32_t inputItemsSize)
+int32_t input_menu(Input inputItems[], int32_t inputItemsSize, int32_t isVenda)
 {
     clear_menu();
     enableRawMode();
@@ -108,13 +108,30 @@ int32_t input_menu(Input inputItems[], int32_t inputItemsSize)
     int selectedButton = 0;
     int selectedItem = 0;
 
-    int converted = atoi(inputItems[3].input);         // Converter o input para int | Input de checkbox indica a sua posição
-    int selectedCheckbox = converted ? converted : -1; // -1 = Nenhum selecionado
+    int converted = atoi(inputItems[3].input); // Converter o input para int | Input de checkbox indica a sua posição
+    int selectedCheckbox;
+    if (converted >= 0 && converted <= 4) // Se o input for um numero entre 0 e 4
+        selectedCheckbox = converted;     // selectedCheckbox = input
+    else
+        selectedCheckbox = -1; // -1 = Nenhum selecionado
+
+    int quantidadeMax = 0;
+    if (isVenda)
+    {
+        quantidadeMax = atoi(inputItems[2].input);
+    }
 
     char c;
 
     while (1)
     {
+        if (isVenda) // Mostrar o preco total
+        {
+            char vendaString[40];
+            sprintf(vendaString, "Total: %.2f€", atof(inputItems[1].input) * atof(inputItems[2].input));
+            menu_centered_item(vendaString, UNDERLINE, "", -5);
+        }
+
         for (int i = 0; i < inputItemsSize; i++)
         {
 
@@ -245,24 +262,32 @@ int32_t input_menu(Input inputItems[], int32_t inputItemsSize)
         { // Handle input characters
             if (selectedItem >= 0 && selectedItem <= inputItemsSize - 1 && !inputItems[selectedItem].isCheckbox)
             {
-                if (inputItems[selectedItem].input[strlen(inputItems[selectedItem].input) - 1] == '*')
+                if (isVenda && selectedItem < 2) // Nao mudar preço nem nome
                 {
-                    inputItems[selectedItem].input[strlen(inputItems[selectedItem].input) - 1] = c;
+                    continue;
                 }
-                else
+
+                if (strlen(inputItems[selectedItem].input) < maxInputSize - 1)
                 {
-                    if (strlen(inputItems[selectedItem].input) < maxInputSize - 1)
+                    inputItems[selectedItem].input[strlen(inputItems[selectedItem].input)] = c;
+                    // inputItems[selectedItem].input[strlen(inputItems[selectedItem].input)] = '*';
+                    // strncat(inputItems[selectedItem].input, &c, 1);
+                }
+                if (isVenda && selectedItem == 2)
+                {
+                    int userInput = atoi(inputItems[2].input);
+                    if (userInput > quantidadeMax)
                     {
-                        inputItems[selectedItem].input[strlen(inputItems[selectedItem].input)] = c;
-                        // inputItems[selectedItem].input[strlen(inputItems[selectedItem].input)] = '*';
-                        // strncat(inputItems[selectedItem].input, &c, 1);
+                        char quantidadeMaxString[40];
+                        sprintf(quantidadeMaxString, "%d", quantidadeMax);
+                        copy_str(inputItems[2].input, quantidadeMaxString, 40);
                     }
                 }
             }
         }
         if (c == 32) // Barra de espaço
         {
-            if (selectedItem > 3)
+            if (selectedItem > 3 && !isVenda)
             {
                 selectedCheckbox = selectedItem - 4;
                 sprintf(inputItems[3].input, "%d", selectedCheckbox);

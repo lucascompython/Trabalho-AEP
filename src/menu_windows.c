@@ -74,7 +74,7 @@ int arrow_menu(char *strings[], int size)
     }
 }
 
-int32_t input_menu(Input inputItems[], int32_t inputItemsSize)
+int32_t input_menu(Input inputItems[], int32_t inputItemsSize, int32_t isVenda)
 {
     clear_menu();
 
@@ -84,12 +84,33 @@ int32_t input_menu(Input inputItems[], int32_t inputItemsSize)
     int selectedItem = 0;
 
     int converted = atoi(inputItems[3].input);
-    int selectedCheckbox = converted ? converted : -1; // -1 = Nenhum selecionado
+    int selectedCheckbox;
+    if (converted >= 0 && converted <= 4)
+    {
+        selectedCheckbox = converted;
+    }
+    else
+    {
+        selectedCheckbox = -1; // Nenhuma checkbox selecionada
+    }
+    int quantidadeMax = 0;
+    if (isVenda)
+    {
+        quantidadeMax = atoi(inputItems[2].input);
+    }
 
     int c;
 
     while (1)
     {
+
+        if (isVenda)
+        {
+            char vendaString[40];
+            sprintf_s(vendaString, 40, "Total: %.2f€", aotf(inputItems[1].input) * atof(inputItems[2].input));
+            menu_centered_item(vendaString, UNDERLINE, "", -5);
+        }
+
         for (int i = 0; i < inputItemsSize; i++)
         {
 
@@ -207,14 +228,28 @@ int32_t input_menu(Input inputItems[], int32_t inputItemsSize)
         }
         else if (c >= 32 && c <= 126)
         { // Printable characters
-            if (strlen(inputItems[selectedItem].input) < maxInputSize)
+            if (isVenda && selectedItem < 2)
+            { // Nao mudar preço nem nome
+                continue;
+            }
+            if (strlen(inputItems[selectedItem].input) < maxInputSize - 1)
             {
                 inputItems[selectedItem].input[strlen(inputItems[selectedItem].input)] = c;
+            }
+            if (isVenda && selectedItem == 2)
+            {
+                int quantidade = atoi(inputItems[2].input);
+                if (quantidade > quantidadeMax)
+                {
+                    char quantidadeString[40];
+                    sprintf_s(quantidadeString, 40, "%d", quantidadeMax);
+                    copy_str(inputItems[2].input, quantidadeString, 40);
+                }
             }
         }
         if (c == SPACE) // Barra de espaço
         {
-            if (selectedItem > 3) // Se tiver numa checkbox
+            if (selectedItem > 3 && !isVenda) // Se tiver numa checkbox
             {
                 selectedCheckbox = selectedItem - 4;
                 sprintf_s(inputItems[3].input, sizeof(inputItems[3].input), "%d", selectedCheckbox);

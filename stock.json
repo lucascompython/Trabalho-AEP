@@ -22,5 +22,11 @@
         "preco": 12.99,
         "quantidade": 5,
         "categoria": "Ramos"
+    },
+    "Ramo de Tulipas": {
+        "uuid": "d62ce86c-418c-4b7b-91bf-d41c863ca407",
+        "preco": 6.99,
+        "quantidade": 32,
+        "categoria": "Ramos"
     }
 }
