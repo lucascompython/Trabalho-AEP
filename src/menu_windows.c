@@ -82,7 +82,9 @@ int32_t input_menu(Input inputItems[], int32_t inputItemsSize)
 
     int selectedButton = 0;
     int selectedItem = 0;
-    int selectedCheckbox = -1; // -1 = Nenhum selecionado
+
+    int converted = atoi(inputItems[3].input);
+    int selectedCheckbox = converted ? converted : -1; // -1 = Nenhum selecionado
 
     int c;
 

@@ -164,6 +164,16 @@ void menu_listar(void)
 {
     printf("Listar artigos\n");
 }
+
+void free_options(char **options, size_t size)
+{
+    for (size_t i = 0; i < size; i++)
+    {
+        free(options[i]);
+    }
+    free(options);
+}
+
 void menu_modificar(void)
 {
     if (size_artigos == 0)
@@ -177,7 +187,13 @@ void menu_modificar(void)
     }
 
     // use arrow_menu to select an already existing artigo
-    char *artigosOptions[size_artigos];
+    // char *artigosOptions[size_artigos];
+    char **artigosOptions = (char **)malloc(sizeof(char *) * size_artigos);
+    if (artigosOptions == NULL)
+    {
+        fprintf(stderr, "Erro: malloc() retornou NULL\n");
+        exit(1);
+    }
     for (size_t i = 0; i < size_artigos; i++)
     {
         artigosOptions[i] = artigos[i].nome;
@@ -185,13 +201,21 @@ void menu_modificar(void)
     int32_t selectedArtigo = arrow_menu(artigosOptions, size_artigos);
 
     char preco[40];
-    sprintf(preco, "%.2f", artigos[selectedArtigo].preco);
     char quantidade[40];
-    sprintf(quantidade, "%ld", artigos[selectedArtigo].quantidade);
     char nome[40];
-    sprintf(nome, "%s", artigos[selectedArtigo].nome);
     char categoria[40];
+#ifdef _WIN32
+    sprintf_s(preco, 40, "%.2f", artigos[selectedArtigo].preco);
+    sprintf_s(nome, 40, "%s", artigos[selectedArtigo].nome);
+    sprintf_s(quantidade, 40, "%lld", artigos[selectedArtigo].quantidade);
+    sprintf_s(categoria, 40, "%d", artigos[selectedArtigo].categoria);
+
+#elif __unix__
+    sprintf(preco, "%.2f", artigos[selectedArtigo].preco);
+    sprintf(nome, "%s", artigos[selectedArtigo].nome);
+    sprintf(quantidade, "%ld", artigos[selectedArtigo].quantidade);
     sprintf(categoria, "%d", artigos[selectedArtigo].categoria);
+#endif
 
     Input inputItems[] = {
         {.label = "Nome", .isCheckbox = 0},
@@ -201,10 +225,11 @@ void menu_modificar(void)
     };
 
     // Copy the content from your character arrays to the input field
-    strcpy(inputItems[0].input, nome);
-    strcpy(inputItems[1].input, preco);
-    strcpy(inputItems[2].input, quantidade);
-    strcpy(inputItems[3].input, categoria);
+
+    copy_str(inputItems[0].input, nome, strlen(nome) + 1);
+    copy_str(inputItems[1].input, preco, strlen(preco) + 1);
+    copy_str(inputItems[2].input, quantidade, strlen(quantidade) + 1);
+    copy_str(inputItems[3].input, categoria, strlen(categoria) + 1);
 
     int32_t result = input_menu(inputItems, LENGTH(inputItems));
     switch (result)
@@ -215,6 +240,7 @@ void menu_modificar(void)
         artigos[selectedArtigo].quantidade = atoi(inputItems[2].input);
         artigos[selectedArtigo].categoria = atoi(inputItems[3].input);
 
+        free_options(artigosOptions, size_artigos);
         clear_menu();
         menu_centered_item("Artigo modificado com sucesso", UNDERLINE, "", 0);
         menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
@@ -222,9 +248,11 @@ void menu_modificar(void)
         menu_principal();
         break;
     case 1:
+        free_options(artigosOptions, size_artigos);
         menu_principal();
         break;
     default:
+        free_options(artigosOptions, size_artigos);
         fprintf(stderr, "Erro: input_menu() retornou %d\n", result);
         exit(1);
     }
