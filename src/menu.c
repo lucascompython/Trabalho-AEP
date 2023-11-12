@@ -9,6 +9,10 @@
 #include <string.h>
 #include <stdlib.h>
 
+#ifdef _WIN32
+#include <conio.h> // Para a welcome screen _getch() ler todas as teclas
+#endif
+
 extern TerminalSize term_size; // from src/main.c
 extern Artigo *artigos;        // from src/main.c
 extern size_t size_artigos;    // from src/main.c
@@ -147,7 +151,15 @@ void menu_introduzir_artigo(void)
         clear_menu();
         menu_centered_item("Artigo introduzido com sucesso", UNDERLINE, "", 0);
         menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
+
+#ifdef __unix__ // ler "qualquer" teclas no linux
+
+        enableRawMode();
         getchar();
+        disableRawMode();
+#elif _WIN32
+        _getch(); // ler qualquer tecla no windows
+#endif
 
         menu_principal();
 
@@ -162,22 +174,18 @@ void menu_introduzir_artigo(void)
 }
 void menu_listar(void)
 {
-    // char **artigosOptions = (char **)malloc(sizeof(char *) * size_artigos);
-    // if (artigosOptions == NULL)
-    // {
-    //     fprintf(stderr, "Erro: malloc() retornou NULL\n");
-    //     exit(1);
-    // }
-    // for (size_t i = 0; i < size_artigos; i++)
-    // {
-    //     artigosOptions[i] = artigos[i].nome;
-    // }
+
     if (size_artigos == 0)
     {
         clear_menu();
         menu_centered_item("Não há artigos para listar", UNDERLINE, "", 0);
         menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
+#ifdef __unix__ // ler "qualquer" teclas no linux
+        enableRawMode();
         getchar();
+#elif _WIN32
+        _getch(); // ler qualquer tecla no windows
+#endif
         menu_principal();
         return;
     }
@@ -214,7 +222,12 @@ void menu_listar(void)
         menu_centered_item(categoria, "", "", 3);
         menu_centered_item(uuid, "", "", 4);
         menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 5);
+#ifdef __unix__ // ler "qualquer" teclas no linux
+        enableRawMode();
         getchar();
+#elif _WIN32
+        _getch(); // ler qualquer tecla no windows
+#endif
         menu_principal();
     }
     else
@@ -230,7 +243,12 @@ void menu_modificar(void)
         clear_menu();
         menu_centered_item("Não há artigos para modificar", UNDERLINE, "", 0);
         menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
+#ifdef __unix__ // ler "qualquer" teclas no linux
+        enableRawMode();
         getchar();
+#elif _WIN32
+        _getch(); // ler qualquer tecla no windows
+#endif
         menu_principal();
         return;
     }
@@ -293,7 +311,12 @@ void menu_modificar(void)
         clear_menu();
         menu_centered_item("Artigo modificado com sucesso", UNDERLINE, "", 0);
         menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
+#ifdef __unix__ // ler "qualquer" teclas no linux
+        enableRawMode();
         getchar();
+#elif _WIN32
+        _getch(); // ler qualquer tecla no windows
+#endif
         menu_principal();
         break;
     case 1:
@@ -316,7 +339,40 @@ void menu_estatisticas(void)
 
     int32_t totalOptions = (int)LENGTH(options);
     int32_t result = arrow_menu(options, totalOptions);
-    printf("result: %d\n", result);
+    switch (result)
+    {
+    case 0:
+        if (size_artigos == 0)
+        {
+            clear_menu();
+            menu_centered_item("Não há artigos para listar", UNDERLINE, "", 0);
+            menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
+
+#ifdef __unix__ // temos que fazer isto para ler "qualquer" teclas no linux
+            enableRawMode();
+            getchar();
+            disableRawMode();
+#elif _WIN32
+            _getch(); // ler qualquer tecla no windows
+#endif
+            menu_principal();
+            return;
+        }
+        break;
+    case 1:
+        printf("Vendas\n");
+        break;
+    case 2:
+        printf("Quebras\n");
+        break;
+    case 3:
+        menu_principal();
+        break;
+    default:
+        fprintf(stderr, "Erro: arrow_menu() retornou %d\n", result);
+        exit(1);
+        break;
+    }
 }
 void menu_simular_vendas(void)
 {
