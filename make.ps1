@@ -4,7 +4,7 @@ param (
     [switch]$release = $false,
     [switch]$run = $false
 )
-$CFLAGS = "/Wall /WX /Iexternal\yyjson\src /wd4820 /wd4296 /wd5045" # Mostrar todos os avisos e considerar avisos como erros (Wall e WX) | Incluir o diretório de cabeçalhos do yyjson | Desativar avisos de padding e de conversão implícita
+$CFLAGS = "/Wall /WX /Iexternal\yyjson\src /wd4820 /wd4296 /wd5045 /wd4267 /wd4242 /wd4244" # Mostrar todos os avisos e considerar avisos como erros (Wall e WX) | Incluir o diretório de cabeçalhos do yyjson | Desativar avisos de padding e de conversão implícita
 $LDFLAGS = ""
 $sourceDir = "src"
 $outputDir = "build"
