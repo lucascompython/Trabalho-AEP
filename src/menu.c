@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 
 #ifdef _WIN32
 #include <conio.h> // Para a welcome screen _getch() ler todas as teclas
@@ -460,8 +461,95 @@ void menu_estatisticas(void)
         printf("Vendas\n");
         break;
     case 2:
-        printf("Quebras\n");
+    {
+        clear_menu();
+        int32_t categoriaCount = get_category_count();
+
+        int32_t *categoryCounts = (int32_t *)malloc(sizeof(int32_t) * categoriaCount);
+        double *categoryTotalPrices = (double *)malloc(sizeof(double) * categoriaCount);
+        if (categoryCounts == NULL || categoryTotalPrices == NULL)
+        {
+            fprintf(stderr, "Erro: malloc() retornou NULL\n");
+            exit(1);
+        }
+
+        for (int32_t i = 0; i < categoriaCount; i++)
+        {
+            categoryCounts[i] = 0;
+            categoryTotalPrices[i] = 0.0;
+        }
+
+        for (size_t i = 0; i < size_artigos; i++)
+        {
+            categoryCounts[artigos[i].categoria] += artigos[i].quantidade;
+            for (uint64_t j = 0; j < artigos[i].quantidade; j++)
+            {
+                categoryTotalPrices[artigos[i].categoria] += artigos[i].preco;
+            }
+        }
+
+        // Initialize an array to store the number of trashed products for each category
+        int32_t *trashedCounts = (int32_t *)calloc(categoriaCount, sizeof(int32_t));
+
+        // Initialize a variable to store the total value going to the trash
+        double trashTotal = 0.0;
+        // Calculate the number of trashed products and the total value going to the trash
+        for (int32_t i = 0; i < categoriaCount; i++)
+        {
+            double trashPercentage;
+            switch (i)
+            {
+            case 0: // Ramos
+                trashPercentage = 0.07;
+                break;
+            case 1: // Arranjos
+                trashPercentage = 0.03;
+                break;
+            default:
+                trashPercentage = 0.04;
+                break;
+            }
+            trashedCounts[i] = (int32_t)round(categoryCounts[i] * trashPercentage);
+            if (categoryCounts[i] != 0)
+            {
+                trashTotal += trashedCounts[i] * categoryTotalPrices[i] / categoryCounts[i];
+            }
+        }
+
+        // Print the header of the table
+        char header[60];
+        sprintf(header, "%-20s | %10s | %7s\n", "Categoria", "Quantidade", "Desperdício");
+        menu_centered_item(header, "", "", 0);
+
+        // Print the line separator
+        char linhas[60];
+        sprintf(linhas, "--------------------|------------|------------\n");
+        menu_centered_item(linhas, "", "", 1);
+
+        // Print each category with its count and total price
+        for (int32_t i = 0; i < categoriaCount; i++)
+        {
+            char *categoriaStr = categoria_to_str(i);
+            char quantidade[40];
+            sprintf(quantidade, "%10d", categoryCounts[i]);
+            char desperdicio[40];
+            sprintf(desperdicio, "%10d", trashedCounts[i]);
+            char linha[120];
+            sprintf(linha, "%-18s | %s | %s", categoriaStr, quantidade, desperdicio);
+            menu_centered_item(linha, "", "", i + 2);
+        }
+
+        menu_centered_item(linhas, "", "", categoriaCount + 2);
+
+        // Print total estimated loss
+        char perdaEstimadaStr[40];
+        sprintf(perdaEstimadaStr, "Perda Estimada: %.2f€\n", trashTotal);
+        menu_centered_item(perdaEstimadaStr, BOLD, UNDERLINE, categoriaCount + 3);
+
+        free(trashedCounts);
         break;
+    }
+
     case 3:
         menu_principal();
         break;

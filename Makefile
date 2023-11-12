@@ -12,7 +12,7 @@ else
 # Compiler and flags
 CC = clang
 CFLAGS = -Wall -Wextra -Werror -std=c17 -I./external/yyjson/src # Mostrar todos os avisos e tratá-los como erros, usar C17 e incluir yyjson
-LDFLAGS = -luuid # para uuid_gen
+LDFLAGS = -luuid -lm # para uuid_gen e math.h
 
 # Compiler flags for the release build
 CFLAGS_RELEASE = -O2 -DNDEBUG -march=native
