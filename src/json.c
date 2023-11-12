@@ -3,6 +3,7 @@
 #include "main.h"
 
 #define STOCK_JSON_FILE "stock.json"
+#define VENDAS_JSON_FILE "vendas.json"
 
 CategoriaArtigo str_to_categoria(const char *str)
 {
