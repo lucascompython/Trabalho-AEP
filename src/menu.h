@@ -25,5 +25,6 @@ void disableRawMode(void);
 
 void menu_principal(void);
 int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize);
+void printMenuItem(Input item, int32_t isSelected, int32_t offset);
 
 #endif // MENU_H

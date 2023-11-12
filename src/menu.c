@@ -9,6 +9,33 @@
 
 extern TerminalSize term_size; // from src/main.c
 
+void printMenuItem(Input item, int32_t isSelected, int32_t offset)
+{
+    int labelLength = strlen(item.label);
+    int inputLength = strlen(item.input);
+    if (isSelected)
+    {
+        if (inputLength)
+        {
+
+            printf("\033[%d;%dH> %s: %s <\n", (term_size.rows / 2) + offset,
+                   ((term_size.columns - labelLength) / 2) - 2, item.label, item.input);
+        }
+        else
+        {
+
+            printf("\033[%d;%dH> %s: %s<\n", (term_size.rows / 2) + offset,
+                   ((term_size.columns - labelLength) / 2) - 2, item.label, item.input);
+        }
+    }
+    else
+    {
+
+        printf("\033[%d;%dH%s: %s\n", (term_size.rows / 2) + offset,
+               (term_size.columns - labelLength) / 2, item.label, item.input);
+    }
+}
+
 void menu_item(char *string, char *color1, char *color2)
 {
     size_t string_size = strlen(string);
@@ -40,7 +67,7 @@ void menu_introduzir_artigo(void)
         {"Nome", ""},
         {"Preço", ""},
         {"Quantidade", ""},
-    };
+        {"Categoria", ""}};
     Artigo artigo;
     int32_t result = input_menu(&artigo, inputItems, LENGTH(inputItems));
     printf("result: %d\n", result);

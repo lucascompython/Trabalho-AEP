@@ -96,33 +96,6 @@ int32_t arrow_menu(char *strings[], int32_t size)
     }
 }
 
-void printMenuItem(Input item, int32_t isSelected, int32_t offset)
-{
-    int labelLength = strlen(item.label);
-    int inputLength = strlen(item.input);
-    if (isSelected)
-    {
-        if (inputLength)
-        {
-
-            printf("\033[%d;%dH> %s: %s <\n", (term_size.rows / 2) + offset,
-                   ((term_size.columns - labelLength) / 2) - 2, item.label, item.input);
-        }
-        else
-        {
-
-            printf("\033[%d;%dH> %s: %s<\n", (term_size.rows / 2) + offset,
-                   ((term_size.columns - labelLength) / 2) - 2, item.label, item.input);
-        }
-    }
-    else
-    {
-
-        printf("\033[%d;%dH%s: %s\n", (term_size.rows / 2) + offset,
-               (term_size.columns - labelLength) / 2, item.label, item.input);
-    }
-}
-
 int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
 {
     clear_menu();
