@@ -33,7 +33,7 @@ void disableRawMode(void);
 #endif
 
 void menu_principal(void);
-int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize);
+int32_t input_menu(Input inputItems[], int32_t inputItemsSize);
 void printMenuItem(Input item, int32_t isSelected, int32_t offset);
 void printMenuCheckbox(char *string, int32_t isSelected, int32_t isCheckboxSelected, int32_t offset);
 

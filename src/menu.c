@@ -2,12 +2,16 @@
 #include "colors.h"
 #include "main.h"
 #include "term_size.h"
+#include "json.h"
+#include "uuid.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
 extern TerminalSize term_size; // from src/main.c
+extern Artigo *artigos;        // from src/main.c
+extern size_t size_artigos;    // from src/main.c
 
 void printMenuItem(Input item, int32_t isSelected, int32_t offset)
 {
@@ -125,10 +129,31 @@ void menu_introduzir_artigo(void)
         {.label = "Categoria", .input = "", .isCheckbox = 1, .checkBoxOptions = {"Ramos", "Arranjos", "Jarros", "CentrosMesa", "OutrasFlores"}},
     };
 
-    Artigo artigo;
-    int32_t result = input_menu(&artigo, inputItems, LENGTH(inputItems));
-    printf("result: %d\n", result);
-    printf("Nome: %s\n", inputItems[0].input);
+    int32_t result = input_menu(inputItems, LENGTH(inputItems));
+    switch (result)
+    {
+    case 0:
+        size_artigos++;
+        artigos = realloc(artigos, sizeof(Artigo) * (size_artigos));
+
+        artigos[size_artigos - 1].nome = (char *)malloc(sizeof(char) * (strlen(inputItems[0].input) + 1));
+        copy_str(artigos[size_artigos - 1].nome, inputItems[0].input, strlen(inputItems[0].input) + 1);
+
+        artigos[size_artigos - 1].preco = atof(inputItems[1].input);
+        artigos[size_artigos - 1].quantidade = atoi(inputItems[2].input);
+        artigos[size_artigos - 1].categoria = atoi(inputItems[3].input);
+        copy_str(artigos[size_artigos - 1].uuid, uuid_gen(), 37);
+
+        menu_principal();
+
+        break;
+    case 1:
+        menu_principal();
+        break;
+    default:
+        fprintf(stderr, "Erro: input_menu() retornou %d\n", result);
+        exit(1);
+    }
 }
 void menu_listar(void)
 {

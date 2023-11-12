@@ -9,6 +9,7 @@
 #include "term_size.h"
 #include <string.h>
 #include <stdlib.h>
+#include "json.h"
 
 #define ESC 27
 
@@ -96,15 +97,14 @@ int32_t arrow_menu(char *strings[], int32_t size)
     }
 }
 
-int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
+int32_t input_menu(Input inputItems[], int32_t inputItemsSize)
 {
     clear_menu();
     enableRawMode();
-    UNUSED(artigo);
 
     const unsigned int maxInputSize = 40;
 
-    int selectedButton = 1;
+    int selectedButton = 0;
     int selectedItem = 0;
     int selectedCheckbox = -1; // -1 = Nenhum selecionado
 
@@ -170,7 +170,7 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
             }
         }
 
-        if (selectedButton == 1)
+        if (selectedButton == 0)
         {
             printf("\033[%d;%dH\033[7m[OK]\033[0m   [Cancelar]\n", (term_size.rows / 2) + inputItemsSize + 2,
                    (term_size.columns - 17) / 2); // 17 é o tamanho da string "[OK]   [Cancel]"
@@ -202,23 +202,23 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
             }
             else if (c == 'D') // Left Arrow
             {
-                if (selectedButton == 2)
-                    selectedButton = 1;
+                if (selectedButton == 1)
+                    selectedButton = 0;
                 else
-                    selectedButton = 2;
+                    selectedButton = 1;
             }
             else if (c == 'C') // Right Arrow
             {
-                if (selectedButton == 1)
-                    selectedButton = 2;
-                else
+                if (selectedButton == 0)
                     selectedButton = 1;
+                else
+                    selectedButton = 0;
             }
         }
         else if (c == '\n')
         { // Enter Key
             disableRawMode();
-            return selectedButton;
+            return selectedButton; // 0 = OK, 1 = Cancelar
         }
         else if (c == 127)
         { // Backspace
@@ -263,6 +263,7 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
             if (selectedItem > 3)
             {
                 selectedCheckbox = selectedItem - 4;
+                sprintf(inputItems[3].input, "%d", selectedCheckbox);
             }
         }
 

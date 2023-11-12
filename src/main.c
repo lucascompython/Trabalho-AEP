@@ -31,6 +31,8 @@ void restoreCursor() { show_cursor(); }
 #endif
 
 TerminalSize term_size;
+Artigo *artigos;
+size_t size_artigos;
 
 void welcome_screen(void)
 {
@@ -40,7 +42,6 @@ void welcome_screen(void)
                        0);
     menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "",
                        1);
-    puts("");
 
 #ifdef __unix__ // temos que fazer isto para ler "qualquer" teclas no linux
     enableRawMode();
@@ -74,18 +75,20 @@ int main(void)
         return 1;
     }
 
+    artigos = get_artigos_array(&size_artigos);
+
     welcome_screen();
     show_cursor(); // Restaurar o cursor ao sair. Não é 'restoreCursor' porque o Windows queixa-se que os paremetros não são os mesmos
 
     char *uuid = uuid_gen();
     printf("UUID: %s\n", uuid);
 
-    size_t size_artigos;
-    Artigo *artigos = get_artigos_array(&size_artigos);
-    artigos[0].preco = 69.0;
+    // size_t size_artigos;
+    // Artigo *artigos = get_artigos_array(&size_artigos);
+    // artigos[0].preco = 69.0;
 
-    // set new UUID
-    copy_str(artigos[0].uuid, uuid, 37);
+    // // set new UUID
+    // copy_str(artigos[0].uuid, uuid, 37);
 
     puts("----------------------");
     for (size_t i = 0; i < size_artigos; i++)
@@ -93,7 +96,7 @@ int main(void)
         printf("NOME: %s\n", artigos[i].nome);
         printf("CATEGORIA: %d\n", artigos[i].categoria);
         printf("PRECO: %f\n", artigos[i].preco);
-        printf("QUANTIDADE: %lld\n", artigos[i].quantidade);
+        printf("QUANTIDADE: %ld\n", artigos[i].quantidade);
         printf("UUID: %s\n", artigos[i].uuid);
         puts("----------------------");
     }
