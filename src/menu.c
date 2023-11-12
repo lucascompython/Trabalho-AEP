@@ -328,7 +328,7 @@ void menu_modificar(void)
         enableRawMode();
         getchar();
 #elif _WIN32
-        _getch();     // ler qualquer tecla no windows
+        _getch(); // ler qualquer tecla no windows
 #endif
         menu_principal();
         break;
@@ -470,8 +470,61 @@ void menu_estatisticas(void)
 
         break;
     case 1:
+    {
 
+        clear_menu();
+        // Sem tempo para fazer isto direito :(
+        if (size_artigos_vendidos == 0)
+        {
+            menu_centered_item("Não há artigos para listar", UNDERLINE, "", 0);
+            menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
+
+#ifdef __unix__ // temos que fazer isto para ler "qualquer" teclas no linux
+            enableRawMode();
+            getchar();
+            disableRawMode();
+#elif _WIN32
+            _getch(); // ler qualquer tecla no windows
+
+#endif
+            menu_principal();
+            break;
+        }
+
+        // Calcular media de todos os artigos vendidos
+
+        double precoTotal = 0.0;
+        for (size_t i = 0; i < size_artigos_vendidos; i++)
+        {
+            precoTotal += artigos_vendidos[i].preco * artigos_vendidos[i].quantidade;
+        }
+
+        double precoMedio = precoTotal / size_artigos_vendidos;
+
+        char precoTotalStr[60];
+#ifdef __unix__
+        sprintf(precoTotalStr, "Média dos preços dos artigos vendidos: %.2f€\n", precoMedio);
+
+#elif _WIN32
+        sprintf_s(precoTotalStr, 60, "Média dos preços das vendas: %.2f€\n", precoTotal);
+#endif
+
+        menu_centered_item(precoTotalStr, BOLD, UNDERLINE, 0);
+
+        menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 1);
+
+#ifdef __unix__ // temos que fazer isto para ler "qualquer" teclas no linux
+        enableRawMode();
+        getchar();
+        disableRawMode();
+#elif _WIN32
+        _getch(); // ler qualquer tecla no windows
+#endif
+        menu_principal();
         break;
+    }
+
+    break;
     case 2:
     {
         clear_menu();
