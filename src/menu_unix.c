@@ -106,7 +106,7 @@ int32_t input_menu(Artigo *artigo, Input inputItems[], int32_t inputItemsSize)
 
     int selectedButton = 1;
     int selectedItem = 0;
-    int selectedCheckbox = 1; // -1 = Nenhum selecionado
+    int selectedCheckbox = -1; // -1 = Nenhum selecionado
 
     char c;
 
