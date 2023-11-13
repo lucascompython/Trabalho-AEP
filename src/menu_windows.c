@@ -85,7 +85,7 @@ int32_t input_menu(Input inputItems[], int32_t inputItemsSize, int32_t isVenda)
 
     int converted = atoi(inputItems[3].input);
     int selectedCheckbox;
-    if (converted >= 0 && converted <= 4)
+    if (converted >= 0 && converted <= 4 && strcmp(inputItems[3].input, "") != 0)
     {
         selectedCheckbox = converted;
     }

@@ -110,8 +110,8 @@ int32_t input_menu(Input inputItems[], int32_t inputItemsSize, int32_t isVenda)
 
     int converted = atoi(inputItems[3].input); // Converter o input para int | Input de checkbox indica a sua posição
     int selectedCheckbox;
-    if (converted >= 0 && converted <= 4) // Se o input for um numero entre 0 e 4
-        selectedCheckbox = converted;     // selectedCheckbox = input
+    if (converted >= 0 && converted <= 4 && strcmp(inputItems[3].input, "") != 0) // Se o input for um numero entre 0 e 4
+        selectedCheckbox = converted;                                             // selectedCheckbox = input
     else
         selectedCheckbox = -1; // -1 = Nenhum selecionado
 
