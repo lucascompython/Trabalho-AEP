@@ -1,6 +1,6 @@
 {
     "Jarro Tulipas": {
-        "uuid": "c441bb85-dc66-4db5-a1db-f532f963de99",
+        "uuid": "9b084dbf-a573-4080-9ad0-6e75276962bc",
         "preco": 69.0,
         "quantidade": 10,
         "categoria": "Jarros"
@@ -28,5 +28,11 @@
         "preco": 6.99,
         "quantidade": 22,
         "categoria": "Ramos"
+    },
+    "Jarro Rosas": {
+        "uuid": "a4c46432-0242-41e8-b295-d41fec552597",
+        "preco": 6.99,
+        "quantidade": 10,
+        "categoria": "Jarros"
     }
 }

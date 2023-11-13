@@ -371,7 +371,6 @@ int32_t arrow_menu_filter(Artigo *artigos, int32_t size)
             c = getchar(); // Read the A, B, C, or D
             if (c == 'A')
             {
-                system("notify-send 'A'");
                 if (selectedOption > 0)
                 {
                     selectedOption--; // Up arrow key
@@ -389,7 +388,6 @@ int32_t arrow_menu_filter(Artigo *artigos, int32_t size)
                 if (selectedOption < totalOptions - 1)
                 {
 
-                    system("notify-send 'B'");
                     changed = 1;
                     selectedOption++; // Down arrow key
                 }
