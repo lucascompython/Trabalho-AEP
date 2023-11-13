@@ -754,6 +754,40 @@ void menu_simular_vendas(void)
 
         // save the artigos_vendidos array to the json file
         save_artigos_array(artigos_vendidos, size_artigos_vendidos, VENDAS_JSON_FILE);
+
+        free(artigosOptions);
+        clear_menu();
+
+        menu_centered_item("Venda simulada com sucesso!", GREEN, UNDERLINE, 0);
+        // total a pagar
+
+        char precoTotalStr[40];
+#ifdef __unix__
+        sprintf(precoTotalStr, "Total a pagar: %.2f€\n", artigos_vendidos[size_artigos_vendidos - 1].preco * artigos_vendidos[size_artigos_vendidos - 1].quantidade);
+#elif _WIN32
+        sprintf_s(precoTotalStr, 40, "Total a pagar: %.2f€\n", artigos_vendidos[size_artigos_vendidos - 1].preco * artigos_vendidos[size_artigos_vendidos - 1].quantidade);
+#endif
+        menu_centered_item(precoTotalStr, BOLD, UNDERLINE, 1);
+
+        menu_centered_item("Pressione qualquer tecla para continuar", UNDERLINE, "", 2);
+#ifdef __unix__ // ler "qualquer" teclas no linux
+        enableRawMode();
+        getchar();
+#elif _WIN32
+        _getch(); // ler qualquer tecla no windows
+#endif
+        menu_principal();
+        break;
+    case 1:
+        free(artigosOptions);
+        menu_principal();
+        break;
+    default:
+        free(artigosOptions);
+        fprintf(stderr, "Erro: input_menu() retornou %d\n", result);
+        exit(1);
+
+        break;
     }
 }
 

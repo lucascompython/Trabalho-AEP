@@ -20,13 +20,13 @@
     "Ramos de Rosas": {
         "uuid": "6bacce49-895e-4a87-8f4f-3585e9b281a8",
         "preco": 12.99,
-        "quantidade": 5,
+        "quantidade": 4,
         "categoria": "Ramos"
     },
     "Ramo de Tulipas": {
         "uuid": "d62ce86c-418c-4b7b-91bf-d41c863ca407",
         "preco": 6.99,
-        "quantidade": 32,
+        "quantidade": 22,
         "categoria": "Ramos"
     }
 }
