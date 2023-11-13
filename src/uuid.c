@@ -13,18 +13,6 @@ char *uuid_gen(void)
 
 #elif _WIN32
 
-// #include <rpcdce.h>
-// #include <stdio.h>
-
-// char *uuid_gen(void)
-// {
-//   UUID uuid;
-//   UuidCreate(&uuid);
-//   unsigned char *str;
-//   UuidToStringA(&uuid, &str);
-//   return str;
-// } // TODO: Fix this, não funciona nao sei porque
-
 #include <stdlib.h>
 
 char *uuid_gen(void)
