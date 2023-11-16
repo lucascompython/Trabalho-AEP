@@ -97,22 +97,8 @@ Artigo *get_artigos_array(size_t *size_artigos, const char *json_file)
     yyjson_doc *doc = yyjson_read_file(json_file, 0, NULL, NULL);
     if (!doc)
     {
-        FILE *f = fopen(json_file, "w");
-        if (f == NULL)
-        {
-            fprintf(stderr, "Erro ao criar o ficheiro JSON\n");
-            exit(1);
-        }
-        fprintf(f, "{}");
-        fclose(f);
-
+        create_json_file(json_file);
         doc = yyjson_read_file(json_file, 0, NULL, NULL);
-
-        if (!doc)
-        {
-            fprintf(stderr, "Erro ao ler o ficheiro JSON\n");
-            exit(1);
-        }
     }
 
     yyjson_val *root = yyjson_doc_get_root(doc);
