@@ -89,5 +89,7 @@ int main(void)
                        VENDAS_JSON_FILE);
     clean_artigos_array(artigos, size_artigos);
     clean_artigos_array(artigos_vendidos, size_artigos_vendidos);
+
+    menu_centered_item("Obrigado por usar o nosso programa!\n", GREEN, BOLD, 0);
     return 0;
 }
