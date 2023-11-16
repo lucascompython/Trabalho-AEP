@@ -28,11 +28,5 @@
         "preco": 6.99,
         "quantidade": 22,
         "categoria": "Ramos"
-    },
-    "Jarro Rosas": {
-        "uuid": "a4c46432-0242-41e8-b295-d41fec552597",
-        "preco": 6.99,
-        "quantidade": 10,
-        "categoria": "Jarros"
     }
 }

@@ -69,13 +69,50 @@ void copy_str(char *dest, const char *src, size_t size)
 #endif
 }
 
+void create_json_file(const char *json_file)
+{
+
+#ifdef __unix__
+    FILE *f = fopen(json_file, "w");
+    if (f == NULL)
+    {
+        fprintf(stderr, "Erro ao criar o ficheiro JSON: (%s)\n", json_file);
+        exit(1);
+    }
+#elif _WIN32
+    FILE *f;
+    errno_t err = fopen_s(&f, json_file, "w");
+    if (err != 0)
+    {
+        fprintf(stderr, "Erro ao criar o ficheiro JSON: (%s)\n", json_file);
+        exit(1);
+    }
+#endif
+    fprintf(f, "{}");
+    fclose(f);
+}
+
 Artigo *get_artigos_array(size_t *size_artigos, const char *json_file)
 {
     yyjson_doc *doc = yyjson_read_file(json_file, 0, NULL, NULL);
     if (!doc)
     {
-        fprintf(stderr, "Erro ao ler o ficheiro JSON\n");
-        exit(1);
+        FILE *f = fopen(json_file, "w");
+        if (f == NULL)
+        {
+            fprintf(stderr, "Erro ao criar o ficheiro JSON\n");
+            exit(1);
+        }
+        fprintf(f, "{}");
+        fclose(f);
+
+        doc = yyjson_read_file(json_file, 0, NULL, NULL);
+
+        if (!doc)
+        {
+            fprintf(stderr, "Erro ao ler o ficheiro JSON\n");
+            exit(1);
+        }
     }
 
     yyjson_val *root = yyjson_doc_get_root(doc);
