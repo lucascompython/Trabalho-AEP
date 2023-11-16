@@ -15,8 +15,8 @@ CFLAGS = -Wall -Wextra -Werror -std=c17 -I./external/yyjson/src # Mostrar todos 
 LDFLAGS = -luuid -lm # para uuid_gen e math.h
 
 # Compiler flags for the release build
-CFLAGS_RELEASE = -O2 -DNDEBUG -march=native
-LDFLAGS_RELEASE = -s
+CFLAGS_RELEASE = -O2 -DNDEBUG -I./external/yyjson/src
+LDFLAGS_RELEASE = -s -lm -luuid
 
 # Directories
 SRC_DIR = src
